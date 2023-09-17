@@ -18,10 +18,43 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: url("../../public/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.teams-section {
+  background: white;
+}
+
+.header {
+  border-radius: 25px 25px 25px 25px;
+  border-style: solid;
+  border-width: 3px 3px 3px 3px;
+  border-color: #000000;
+  box-shadow: 0px 5px 0px 1px #000000;
+}
+
+.team {
+  border-radius: 25px 25px 25px 25px;
+  border-style: solid;
+  border-width: 3px 3px 3px 3px;
+  border-color: #000000;
+  box-shadow: 0px 5px 0px 1px #000000;
+}
+
+.team-label {
+  border-radius: 25px 25px 25px 25px;
+  border-style: solid;
+  border-width: 3px 3px 3px 3px;
+  border-color: #000000;
+  box-shadow: 0px 5px 0px 1px #000000;
+}
+
+.admin-section {
+  border-radius: 25px 25px 25px 25px;
+  border-style: solid;
+  border-width: 3px 3px 3px 3px;
+  border-color: #000000;
+  box-shadow: 0px 5px 0px 1px #000000;
 }

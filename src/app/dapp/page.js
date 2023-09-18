@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
 
 const options = {
+    dappMetadata: {name: "SS DAPP", url: "https://dapp-ss.vercel.app/dapp"},
     preferDesktop: false
   };
 
@@ -263,7 +264,6 @@ const Betting = () => {
         }
     }
 
-
     const initializeMetaMask = async () => {
         try {
             const provider = MMSDK.getProvider(); // You can also access via window.ethereum
@@ -290,7 +290,6 @@ const Betting = () => {
             setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
         }
     };
-
 
     const renderRefresh = () => {
         if (!address) {

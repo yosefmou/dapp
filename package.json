@@ -12,6 +12,7 @@
   "dependencies": {
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/sdk": "^0.6.2",
+    "@vercel/analytics": "^1.0.2",
     "autoprefixer": "10.4.15",
     "bufferutil": "^4.0.7",
     "encoding": "^0.1.13",

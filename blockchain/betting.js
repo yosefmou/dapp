@@ -734,7 +734,7 @@ const TokenABI = [
 ]
 
 const bettingContract = web3 => {
-	return new web3.eth.Contract(ABI, '0x54854487aB387d9e892b129934398126b30017bF');
+	return new web3.eth.Contract(ABI, '0x5bC622D485653c65d899D794594dBf160E87eea0');
 }
 
 const tokenContract = web3 => {

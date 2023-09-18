@@ -5,7 +5,6 @@ import "./ownable.sol";
 import "./ATM.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-// SSTOKEN CONTRACT 0xe9c038aE26Dc29cC24014fECb6cC4F6c24158956
 contract ssdapp is ATM, Ownable {
 
     event NewBet(
@@ -33,8 +32,7 @@ contract ssdapp is ATM, Ownable {
     uint public numTeams;
     using SafeMath for uint256;
 
-    // if the address has already placed a bet, they can't place another one
-    // 0 = no bet, 1 = bet
+  
     mapping (address => uint) public numBetsAddress;
 
     bool private locked;
@@ -56,7 +54,6 @@ contract ssdapp is ATM, Ownable {
         teams.push(Team(_name, 0));
     }
 
-    // return total bet amount of a team
     function getTotalBetAmount (uint _teamId) public view returns (uint) {
         return teams[_teamId].totalBetAmount;
     }
@@ -69,13 +66,16 @@ contract ssdapp is ATM, Ownable {
         return teams;
     }
 
-    // users can bet on a team
     function createBet (string memory _name, uint _teamId) external payable {       
-        require (msg.sender != conOwner, "Owner can't make a bet");
-        require (numBetsAddress[msg.sender] == 0, "You have already placed a bet");
-        require (msg.value > 0.009 ether, "Bet More");
-        require (msg.value < 0.1 ether, "Bet Less");
+        require(msg.sender != conOwner, "Owner can't make a bet");
 
+        uint256 minBetAmount = 0.01 ether;
+        uint256 maxBetAmount = 0.1 ether;
+
+        require(msg.value >= minBetAmount, "Bet amount is less than the minimum bet");
+        require(msg.value <= maxBetAmount, "Bet amount exceeds the maximum bet");
+        
+        require(numBetsAddress[msg.sender] == 0, "You have already placed a bet");
 
         deposit();
 

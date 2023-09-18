@@ -3,10 +3,8 @@ import { MetaMaskSDK } from '@metamask/sdk';
 import Web3 from 'web3'
 import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
-// import detectEthereumProvider from '@metamask/detect-provider';
 
 const options = {
-    dappMetadata: {name: "SS DAPP", url: "https://dapp-ss.vercel.app/dapp"},
     preferDesktop: false
   };
 

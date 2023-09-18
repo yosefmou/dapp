@@ -325,7 +325,7 @@ const Betting = () => {
             return null
         }
         return (
-            <button onClick={connectWalletHandler} className="flex gap-2 p-2 ml-0 text-black bg-white pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
+            <button onClick={connectWalletHandler} className="flex justify-center w-20 gap-2 p-2 m-0 text-black bg-white pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
         )
     }
 
@@ -336,6 +336,11 @@ const Betting = () => {
             await initializeMetaMask();
         }
     };
+    
+
+    const redirectToWebsiteHandler = async () => {
+        window.open('https://shonenshowdown.com/', '_blank');
+    }
     
     // const connectWalletHandler = async () => {
     //     // Detect Ethereum provider
@@ -535,6 +540,7 @@ const Betting = () => {
                         <p className='mr-0 text-white lg:mr-7'>{walletSSBalanceTxt}</p>
                         <button onClick={connectWalletHandler} className="z-50 flex gap-2 p-2 text-[#e97039] bg-white place-items-center lg:pointer-events-auto rounded-xl lg:m-0 m-1">{walletConnectorText}</button>
                         {renderRefresh()}
+                        <button onClick={redirectToWebsiteHandler} className="w-20 justify-center text-center z-50 flex gap-2 p-2 lg:ml-2 text-white bg-[#1D1C1C] place-items-center lg:pointer-events-auto rounded-xl lg:mt-0 mt-1 m-0">Website</button>
                     </div>
                 </div>
             </div>

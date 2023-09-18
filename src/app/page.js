@@ -1,7 +1,7 @@
 'use client';
 import Web3 from 'web3'
 import React, { useState, useEffect } from 'react';
-import bettingContract from '../../../blockchain/betting';
+import bettingContract from '../../blockchain/betting';
 
 const Betting = () => {
     const [errorMsg, setErrorMsg] = useState('')

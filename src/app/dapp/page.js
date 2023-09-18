@@ -7,7 +7,7 @@ import bettingContract from '../../../blockchain/betting';
 
 const options = {
     dappMetadata: {name: "SS DAPP", url: "https://dapp-ss.vercel.app/dapp"},
-    preferDesktop: true
+    preferDesktop: false
   };
 
 const MMSDK = new MetaMaskSDK(options);

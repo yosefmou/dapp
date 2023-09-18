@@ -30,6 +30,7 @@ const Betting = () => {
     const [tokenContract, setTokenContract] = useState(null)
     const [walletConnectorText, setWalletConnectorText] = useState('Connect Wallet')
 
+    const [totaPlatformlBetAmount, setTotalPlatformBetAmount] = useState('')
     const [betNameTeam1, setBetNameTeam1] = useState('');
     const [betAmountTeam1, setBetAmountTeam1] = useState('');
     const [betNameTeam2, setBetNameTeam2] = useState('');
@@ -81,6 +82,31 @@ const Betting = () => {
             setTotalBetAmount(totalBetsAllTeams)
         } catch (error) {
             console.log(error.message)
+        }
+    }
+
+    const getTotaPlatformlBetAmount = async () => {
+        try {
+            const totaBest = await vmContract.methods.totalBetMoney().call(); // we need to pass the team id here
+            const totaPlatformlBets = web3.utils.fromWei(totaBest.toString(), 'ether');
+            setTotalPlatformBetAmount(`Dapp Total Bets: ${totaPlatformlBetAmount} ETH`)
+
+            console.log(totaPlatformlBets)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    const resetTeamsHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const result = await vmContract.methods.reset().send({
+                from: address,
+                to: vmContract.options.address,
+            });
+        } catch (error) {
+            console.error(error.message);
+            setErrorMsg(error.message);
         }
     }
 
@@ -228,12 +254,15 @@ const Betting = () => {
             });
 
             setSuccessMsg(<span className='p-2 bg-white'>Bet placed successfully</span>);
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 20000);
         } catch (error) {
             console.error(error.message);
             setErrorMsg(<span className='p-2 bg-white'>There is an error while placing bet, please try again later</span>);
             setTimeout(() => {
                 setErrorMsg('');
-            }, 10000);
+            }, 20000);
         }
     };
 
@@ -390,12 +419,12 @@ const Betting = () => {
                                                 value={index === 0 ? betAmountTeam1 : betAmountTeam2}
                                                 onChange={(e) => handleBetAmountChange(e, index)}
                                                 className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="Min. 0.02 - Max. 0.1"
+                                                placeholder="Min. 0.01 - Max. 0.1"
                                                 required
                                             />
                                             <button type="submit" className="text-[#e97039] absolute right-2.5 bottom-2.5 bg-white hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">BET</button>
                                         </div>
-                                        <div className=''>Total Bets: {team.totalTokenBetAmount}</div>
+                                        <div className='text-lg font-bold'>Total Bets: {team.totalTokenBetAmount} ETH</div>
                                     </div>
                                 </div>
                             </form>
@@ -465,6 +494,20 @@ const Betting = () => {
                                             required
                                         />
                                         <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#e97039] hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Add Team</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div className='flex flex-col items-center'>
+                            <h1 className='text-4xl font-bold uppercase'>Reset</h1>
+                            <h6 className='text-white text-md font-small'>Start from a clean state</h6>
+                        </div>
+                        <form onSubmit={(e) => resetTeamsHandler(e)} className='flex justify-center'>
+                            <div className='p-5 addTeam'>
+                                <div className=''>
+                                    <label htmlFor='reset' className="mb-1 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
+                                    <div className="relative">
+                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Reset</button>
                                     </div>
                                 </div>
                             </div>

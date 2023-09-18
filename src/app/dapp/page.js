@@ -6,7 +6,7 @@ import bettingContract from '../../../blockchain/betting';
 // import detectEthereumProvider from '@metamask/detect-provider';
 
 const options = {
-    dappMetadata: {name: "SS DAPP", url: "https://shonenshowdown.com/"},
+    dappMetadata: {name: "SS DAPP", url: "https://dapp-ss.vercel.app/dapp"},
     preferDesktop: true
   };
 

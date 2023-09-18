@@ -4,7 +4,13 @@ import Web3 from 'web3'
 import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
 // import detectEthereumProvider from '@metamask/detect-provider';
-const MMSDK = new MetaMaskSDK({});
+
+const options = {
+    dappMetadata: {name: "SS DAPP", url: "https://shonenshowdown.com/"},
+    preferDesktop: true
+  };
+
+const MMSDK = new MetaMaskSDK(options);
 
 const Betting = () => {
     const [errorMsg, setErrorMsg] = useState('')

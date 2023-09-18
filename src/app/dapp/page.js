@@ -2,6 +2,7 @@
 import Web3 from 'web3'
 import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 const Betting = () => {
     const [errorMsg, setErrorMsg] = useState('')
@@ -257,32 +258,37 @@ const Betting = () => {
     }
 
     const connectWalletHandler = async () => {
-        if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
-            try {
-                const networkId = 5; // Goerli network ID
-                await window.ethereum.request({ method: 'eth_chainId', params: [networkId.toString()] });
-                await window.ethereum.request({ method: 'eth_requestAccounts' })
-
-                const web3 = new Web3(window.ethereum)
-                setWeb3(web3)
-
-                const accounts = await web3.eth.getAccounts();
-                setAddress(accounts[0])
-
-                const vm = await bettingContract.bettingContract(web3);
-                setVmContract(vm)
-
-                const tokenContract = await bettingContract.tokenContract(web3);
-                setTokenContract(tokenContract)
-            } catch (err) {
-                console.log(err.message)
-                setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>)
-            }
+        // Detect Ethereum provider
+        const provider = await detectEthereumProvider();
+      
+        if (provider) {
+          try {
+            // Use the detected provider to initialize MetaMask
+            const web3 = new Web3(provider);
+            setWeb3(web3);
+      
+            // Request Ethereum accounts
+            const accounts = await web3.eth.requestAccounts();
+            setAddress(accounts[0]);
+      
+            // Continue with other initialization steps as needed
+            const vm = await bettingContract.bettingContract(web3);
+            setVmContract(vm);
+      
+            const tokenContract = await bettingContract.tokenContract(web3);
+            setTokenContract(tokenContract);
+      
+            // Now, MetaMask is connected and initialized
+          } catch (err) {
+            console.log(err.message);
+            setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
+          }
         } else {
-            console.log('MetaMask is not installed')
-            setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>)
+          console.log('MetaMask is not installed');
+          setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>);
         }
-    }
+      };
+      
 
     const renderTeams = () => {
         if (!teams || teams.length === 0) {

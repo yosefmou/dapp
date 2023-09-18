@@ -1,8 +1,10 @@
 'use client';
+import { MetaMaskSDK } from '@metamask/sdk';
 import Web3 from 'web3'
 import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
-import detectEthereumProvider from '@metamask/detect-provider';
+// import detectEthereumProvider from '@metamask/detect-provider';
+const MMSDK = new MetaMaskSDK({});
 
 const Betting = () => {
     const [errorMsg, setErrorMsg] = useState('')
@@ -175,13 +177,13 @@ const Betting = () => {
         const name = e.target.betName.value;
         const betAmount = e.target.betAmount.value;
 
-        
+
         try {
             const totalSupply = await tokenContract.methods.totalSupply().call();
             const pointTwoPercent = web3.utils.toBN(totalSupply).mul(web3.utils.toBN(2)).div(web3.utils.toBN(1000));
             const pointTwoPercentInEther = web3.utils.fromWei(pointTwoPercent, 'ether');
-            
-            console.log(Number(walletSSBalance) , Number(pointTwoPercentInEther));
+
+            console.log(Number(walletSSBalance), Number(pointTwoPercentInEther));
 
             if (Number(walletSSBalance) < Number(pointTwoPercentInEther)) {
                 setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
@@ -257,38 +259,84 @@ const Betting = () => {
         }
     }
 
-    const connectWalletHandler = async () => {
-        // Detect Ethereum provider
-        const provider = await detectEthereumProvider();
-      
-        if (provider) {
-          try {
-            // Use the detected provider to initialize MetaMask
-            const web3 = new Web3(provider);
-            setWeb3(web3);
-      
-            // Request Ethereum accounts
-            const accounts = await web3.eth.requestAccounts();
-            setAddress(accounts[0]);
-      
-            // Continue with other initialization steps as needed
-            const vm = await bettingContract.bettingContract(web3);
-            setVmContract(vm);
-      
-            const tokenContract = await bettingContract.tokenContract(web3);
-            setTokenContract(tokenContract);
-      
-            // Now, MetaMask is connected and initialized
-          } catch (err) {
-            console.log(err.message);
+
+    const initializeMetaMask = async () => {
+        try {
+            const provider = MMSDK.getProvider(); // You can also access via window.ethereum
+            if (provider) {
+                const web3 = new Web3(provider);
+                setWeb3(web3);
+
+                // Request Ethereum accounts
+                const accounts = await web3.eth.requestAccounts();
+                setAddress(accounts[0]);
+
+                // Continue with other initialization steps as needed
+                const vm = await bettingContract.bettingContract(web3);
+                setVmContract(vm);
+
+                const tokenContract = await bettingContract.tokenContract(web3);
+                setTokenContract(tokenContract);
+            } else {
+                console.log('MetaMask is not installed');
+                setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>);
+            }
+        } catch (err) {
+            console.error(err.message);
             setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
-          }
-        } else {
-          console.log('MetaMask is not installed');
-          setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>);
         }
-      };
-      
+    };
+
+
+    const renderRefresh = () => {
+        if (!address) {
+            return null
+        }
+        return (
+            <button onClick={connectWalletHandler} className="flex gap-2 p-2 ml-0 text-black bg-white pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
+        )
+    }
+
+    const connectWalletHandler = async () => {
+        if (web3 === null) {
+            await initializeMetaMask();
+        } else {
+            await initializeMetaMask();
+        }
+    };
+    
+    // const connectWalletHandler = async () => {
+    //     // Detect Ethereum provider
+    //     const provider = await MetaMaskSDK.create({});
+
+    //     if (provider) {
+    //         try {
+    //             // Use the detected provider to initialize MetaMask
+    //             const web3 = new Web3(provider);
+    //             setWeb3(web3);
+
+    //             // Request Ethereum accounts
+    //             const accounts = await web3.eth.requestAccounts();
+    //             setAddress(accounts[0]);
+
+    //             // Continue with other initialization steps as needed
+    //             const vm = await bettingContract.bettingContract(web3);
+    //             setVmContract(vm);
+
+    //             const tokenContract = await bettingContract.tokenContract(web3);
+    //             setTokenContract(tokenContract);
+
+    //             // Now, MetaMask is connected and initialized
+    //         } catch (err) {
+    //             console.log(err.message);
+    //             setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
+    //         }
+    //     } else {
+    //         console.log('MetaMask is not installed');
+    //         setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>);
+    //     }
+    // };
+
 
     const renderTeams = () => {
         if (!teams || teams.length === 0) {
@@ -359,16 +407,6 @@ const Betting = () => {
                 </div>
             );
         }
-    }
-
-    const renderRefresh = () => {
-        if (!address) {
-            return null
-        }
-
-        return (
-            <button onClick={connectWalletHandler} className="flex gap-2 p-2 ml-0 text-black bg-white pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
-        )
     }
 
     const renderOwnerFunctions = () => {

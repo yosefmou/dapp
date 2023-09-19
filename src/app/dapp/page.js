@@ -239,11 +239,11 @@ const Betting = () => {
             const gasPriceInWei = BigInt(web3.utils.toWei(gasPrice, 'gwei'));
             const gasCostInWei = BigInt(doubledGasLimit) * gasPriceInWei;
 
-            const userBalance = await web3.eth.getBalance(address);
-            if (BigInt(userBalance) < BigInt(betAmountInWei) + BigInt(gasCostInWei)) {
-                setErrorMsg('Insufficient balance to place bet + gas cost');
-                return;
-            }
+            // const userBalance = await web3.eth.getBalance(address);
+            // if (BigInt(userBalance) < BigInt(betAmountInWei) + BigInt(gasCostInWei)) {
+            //     setErrorMsg('Insufficient balance to place bet + gas cost');
+            //     return;
+            // }
 
             const result = await vmContract.methods.createBet(name, teamId).send({
                 to: vmContract.options.address,

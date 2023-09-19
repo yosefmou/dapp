@@ -249,8 +249,6 @@ const Betting = () => {
                 to: vmContract.options.address,
                 from: address,
                 value: betAmountInWei,
-                gasPrice: gasPriceInWei,
-                gas: doubledGasLimit
             });
 
             setSuccessMsg(<span className='p-2 bg-white'>Bet placed successfully</span>);

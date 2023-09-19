@@ -210,16 +210,16 @@ const Betting = () => {
 
 
         try {
-            const totalSupply = await tokenContract.methods.totalSupply().call();
-            const pointTwoPercent = web3.utils.toBN(totalSupply).mul(web3.utils.toBN(2)).div(web3.utils.toBN(1000));
-            const pointTwoPercentInEther = web3.utils.fromWei(pointTwoPercent, 'ether');
+            // const totalSupply = await tokenContract.methods.totalSupply().call();
+            // const pointTwoPercent = web3.utils.toBN(totalSupply).mul(web3.utils.toBN(2)).div(web3.utils.toBN(1000));
+            // const pointTwoPercentInEther = web3.utils.fromWei(pointTwoPercent, 'ether');
 
-            console.log(Number(walletSSBalance), Number(pointTwoPercentInEther));
+            // console.log(Number(walletSSBalance), Number(pointTwoPercentInEther));
 
-            if (Number(walletSSBalance) < Number(pointTwoPercentInEther)) {
-                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
-                return;
-            }
+            // if (Number(walletSSBalance) < Number(pointTwoPercentInEther)) {
+            //     setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
+            //     return;
+            // }
 
             const betAmountString = betAmount.toString();
             const betAmountInWei = web3.utils.toWei(betAmountString, 'ether');

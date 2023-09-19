@@ -178,18 +178,17 @@ const Betting = () => {
             const gasPriceInWei = BigInt(web3.utils.toWei(gasPrice, 'gwei'));
             const gasCostInWei = BigInt(doubledGasLimit) * gasPriceInWei;
 
-            const userBalance = await web3.eth.getBalance(address);
-            if (BigInt(userBalance) < BigInt(betAmount) + BigInt(gasCostInWei)) {
-                return;
-            }
+            // const userBalance = await web3.eth.getBalance(address);
+            // if (BigInt(userBalance) < BigInt(betAmount) + BigInt(gasCostInWei)) {
+            //     return;
+            // }
 
-            console.log(winnerIdInt, address, vmContract.options.address, betAmount, gasPriceInWei, doubledGasLimit);
             const result = await vmContract.methods.teamWinDistribution(winnerIdInt).send({
                 from: address, //sender
                 to: vmContract.options.address, //receiver - contract address
                 value: betAmount, // amount to send
-                gasPrice: gasPriceInWei, // gas price in wei
-                gas: doubledGasLimit // gas limit
+                // gasPrice: gasPriceInWei, // gas price in wei
+                // gas: doubledGasLimit // gas limit
             });
 
             setSuccessMsg(<span className='p-2 bg-white'>Winners declared successfully!</span>);
@@ -210,16 +209,12 @@ const Betting = () => {
 
 
         try {
-            // const totalSupply = await tokenContract.methods.totalSupply().call();
-            // const pointTwoPercent = web3.utils.toBN(totalSupply).mul(web3.utils.toBN(2)).div(web3.utils.toBN(1000));
-            // const pointTwoPercentInEther = web3.utils.fromWei(pointTwoPercent, 'ether');
-
-            // console.log(Number(walletSSBalance), Number(pointTwoPercentInEther));
-
-            // if (Number(walletSSBalance) < Number(pointTwoPercentInEther)) {
-            //     setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
-            //     return;
-            // }
+            const pointTwoPercent =  (0.2 / 100) * 100000000
+            console.log(Number(walletSSBalance), Number(pointTwoPercent));
+            if (Number(walletSSBalance) < Number(pointTwoPercent)) {
+                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
+                return;
+            }
 
             const betAmountString = betAmount.toString();
             const betAmountInWei = web3.utils.toWei(betAmountString, 'ether');
@@ -273,8 +268,7 @@ const Betting = () => {
             setWalletBalance(finalBalance)
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth = web3.utils.fromWei(ssBalance, 'ether');
-            const ssBalanceInEth2Decimal = Math.round(ssBalanceInEth * 100) / 100;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10**8;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
             const balanceWithTxt = "SS Balance: " + ssBalanceInEth2Decimal.toString();
             setWalletSSBalance(finalSSBalance)

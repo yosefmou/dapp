@@ -5,9 +5,9 @@ import React, { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
 
 const options = {
-    dappMetadata: {name: "SS DAPP", url: "https://dapp-ss.vercel.app/dapp"},
+    dappMetadata: { name: "pokebets DAPP", url: "https://pokebets.vercel.app/dapp" },
     preferDesktop: false
-  };
+};
 
 const MMSDK = new MetaMaskSDK(options);
 
@@ -209,10 +209,10 @@ const Betting = () => {
 
 
         try {
-            const pointTwoPercent =  (0.2 / 100) * 100000000
+            const pointTwoPercent = (0.2 / 100) * 100000000
             console.log(Number(walletSSBalance), Number(pointTwoPercent));
             if (Number(walletSSBalance) < Number(pointTwoPercent)) {
-                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% SS tokens to place bet</span>);
+                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% pokebets tokens to place bet</span>);
                 return;
             }
 
@@ -268,9 +268,9 @@ const Betting = () => {
             setWalletBalance(finalBalance)
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10**8;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 8;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
-            const balanceWithTxt = "SS Balance: " + ssBalanceInEth2Decimal.toString();
+            const balanceWithTxt = "pokebets Balance: " + ssBalanceInEth2Decimal.toString();
             setWalletSSBalance(finalSSBalance)
             setWalletSSBalanceTxt(balanceWithTxt)
 
@@ -328,12 +328,12 @@ const Betting = () => {
             await initializeMetaMask();
         }
     };
-    
+
 
     const redirectToWebsiteHandler = async () => {
-        window.open('https://shonenshowdown.com/', '_blank');
+        window.open('https://pokebets.vip/', '_blank');
     }
-    
+
     // const connectWalletHandler = async () => {
     //     // Detect Ethereum provider
     //     const provider = await MetaMaskSDK.create({});
@@ -371,7 +371,7 @@ const Betting = () => {
         if (!teams || teams.length === 0) {
             return (
                 <div className='flex w-full p-10 bg-white mt-14'>
-                    <h1 className='text-3xl font-bold uppercase text-[#e97039]'>NO LIVE BATTLES, STAY TUNED</h1>
+                    <h1 className='text-3xl font-bold uppercase text-[#000000]'>NO LIVE BATTLES, STAY TUNED</h1>
                 </div>
             );
         } else if (teams.length % 2 === 0) {
@@ -384,9 +384,9 @@ const Betting = () => {
                     <div className='flex flex-col lg:flex-row'>
                         {teams.map((team, index) => (
                             <form onSubmit={(e) => placeBetHandler(e, index)} key={index} className='flex'>
-                                <div className='lg:my-0 my-2 p-12 lg:p-20 mx-2 team h-[570px] bg-[#e97039]'>
+                                <div className='lg:my-0 my-2 p-12 lg:p-20 mx-2 team h-[570px] bg-[#000000]'>
                                     <div className='w-60 h-60'>
-                                        <div className='p-3 bg-white text-[#e97039] team-label text-center font-bold'>#{team.id} - {team.name}</div>
+                                        <div className='p-3 bg-white text-[#000000] team-label text-center font-bold'>#{team.id} - {team.name}</div>
                                         <img className='object-cover w-full h-full mt-1 mb-1' src={`${team.name}.png`} />
                                         <label htmlFor={`betNameTeam${index + 1}`} className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Bet amount</label>
                                         <div className="relative">
@@ -419,7 +419,7 @@ const Betting = () => {
                                                 placeholder="Min. 0.01 - Max. 0.1"
                                                 required
                                             />
-                                            <button type="submit" className="text-[#e97039] absolute right-2.5 bottom-2.5 bg-white hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">BET</button>
+                                            <button type="submit" className="text-[#000000] absolute right-2.5 bottom-2.5 bg-white hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">BET</button>
                                         </div>
                                         <div className='text-lg font-bold'>Total Bets: {team.totalTokenBetAmount} ETH</div>
                                     </div>
@@ -432,7 +432,7 @@ const Betting = () => {
         } else {
             return (
                 <div className='flex w-full p-10 bg-white mt-14'>
-                    <h1 className='text-3xl font-bold uppercase text-[#e97039]'>NO LIVE BATTLES, STAY TUNED</h1>
+                    <h1 className='text-3xl font-bold uppercase text-[#000000]'>NO LIVE BATTLES, STAY TUNED</h1>
                 </div>
             );
         }
@@ -442,7 +442,7 @@ const Betting = () => {
         if (address !== null) {
             if (address === owner) {
                 return (
-                    <div className='flex flex-col items-center p-5 mt-14 admin-section bg-[#e97039]'>
+                    <div className='flex flex-col items-center p-5 mt-14 admin-section bg-[#000000]'>
                         <div className='flex flex-col items-center mt-14'>
                             <h1 className='text-4xl font-bold uppercase'>Choose Winner</h1>
                             <h6 className='text-white text-md font-small'>Winner is by the id, the id you will find in LIVE BATTELS</h6>
@@ -464,7 +464,7 @@ const Betting = () => {
                                             placeholder="Winner ID"
                                             required
                                         />
-                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#e97039] hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Winner</button>
+                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#000000] hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Winner</button>
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +490,7 @@ const Betting = () => {
                                             placeholder="Team"
                                             required
                                         />
-                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#e97039] hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Add Team</button>
+                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#000000] hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Add Team</button>
                                     </div>
                                 </div>
                             </div>
@@ -504,7 +504,7 @@ const Betting = () => {
                                 <div className=''>
                                     <label htmlFor='reset' className="mb-1 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
                                     <div className="relative">
-                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#e97039] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Reset</button>
+                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -522,36 +522,47 @@ const Betting = () => {
 
     return (
         <main className="flex flex-col items-center justify-start min-h-screen p-1 lg:p-14">
-            <div className="header z-10 items-center justify-between w-full font-mono text-sm flex lg:flex-row flex-col bg-[#e97039] px-8">
+            <div className="header z-10 items-center justify-between w-full font-mono text-sm flex lg:flex-row flex-col bg-[#000000] px-8">
                 <div className="top-0 left-0 flex justify-center w-full pt-8 pb-6 lg:static lg:w-auto lg:p-4">
-                    <img className="h-20" src="logo.png" />
+                    <img className="h-20" src="logo.webp" />
                 </div>
                 <div className="left-0 flex flex-col items-end justify-center w-full bg-gradient-to-t lg:static lg:h-auto lg:w-auto lg:bg-none">
                     <div className="flex flex-col items-center justify-center w-full h-full p-4 lg:flex-row lg:p-0">
                         <p className='mr-0 text-white lg:mr-7'>{walletBalance}</p>
                         <p className='mr-0 text-white lg:mr-7'>{walletSSBalanceTxt}</p>
-                        <button onClick={connectWalletHandler} className="z-50 flex gap-2 p-2 text-[#e97039] bg-white place-items-center lg:pointer-events-auto rounded-xl lg:m-0 m-1">{walletConnectorText}</button>
+                        <button onClick={connectWalletHandler} className="z-50 flex gap-2 p-2 text-[#000000] bg-white place-items-center lg:pointer-events-auto rounded-xl lg:m-0 m-1">{walletConnectorText}</button>
                         {renderRefresh()}
                         <button onClick={redirectToWebsiteHandler} className="w-20 justify-center text-center z-50 flex gap-2 p-2 lg:ml-2 text-white bg-[#1D1C1C] place-items-center lg:pointer-events-auto rounded-xl lg:mt-0 mt-1 m-0">Website</button>
                     </div>
                 </div>
             </div>
-            <div className='flex mt-14 bg-[#e97039] header px-8 py-8 mb-10'>
+            <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
                 <h1 className='text-4xl font-bold uppercase'>live battles</h1>
             </div>
             <div className='flex items-center justify-around'>
                 {renderTeams()}
             </div>
 
+            <div className='flex flex-col items-center justify-around'>
+                <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
+                    <h1 className='text-4xl font-bold uppercase'>Guide</h1>
+                </div>
+                <ol className='w-full text-left bg-[#000000] header p-8'>
+                    <li className='mb-2'><strong>TRAINER 1</strong> Will be on the <span className="text-[red]">bottom left corner</span></li>
+                    <li className='mb-2'><strong>TRAINER 2</strong> Will be on the <span className="text-[red]">top right corner</span></li>
+                    <img src='ezgif.com-gif-maker.gif' className='w-full' />
+
+                </ol>
+            </div>
             <div className='flex flex-col items-center justify-around p-8'>
-                <div className='flex mt-14 bg-[#e97039] header px-8 py-8 mb-10'>
+                <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
                     <h1 className='text-4xl font-bold uppercase'>Rules</h1>
                 </div>
-                <ol className='w-full text-left bg-[#e97039] header p-8'>
+                <ol className='w-full text-left bg-[#000000] header p-8'>
                     <li className='mb-2'>1. <strong>One Bet Per Match:</strong> Users are allowed to place a single bet per match.</li>
                     <li className='mb-2'>2. <strong>Minimum Bet Amount:</strong> The minimum bet amount is 0.01 ETH.</li>
                     <li className='mb-2'>3. <strong>Maximum Bet Amount:</strong> The maximum bet amount is 0.1 ETH.</li>
-                    <li className='mb-2'>4. <strong>Minimum SS Token Requirement:</strong> Users must hold a minimum amount of SS tokens to place a bet.</li>
+                    <li className='mb-2'>4. <strong>Minimum pokebets Token Requirement:</strong> Users must hold a minimum amount of pokebets tokens to place a bet.</li>
                     <li className='mb-2'>5. <strong>Bets in ETH:</strong> All bets are to be placed in Ethereum (ETH).</li>
                     <li className='mb-2'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li>
                 </ol>

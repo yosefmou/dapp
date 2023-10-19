@@ -564,7 +564,7 @@ const Betting = () => {
                     <li className='mb-2'>3. <strong>Maximum Bet Amount:</strong> The maximum bet amount is 0.1 ETH.</li>
                     <li className='mb-2'>4. <strong>Minimum pokebets Token Requirement:</strong> Users must hold a minimum amount of pokebets tokens to place a bet.</li>
                     <li className='mb-2'>5. <strong>Bets in ETH:</strong> All bets are to be placed in Ethereum (ETH).</li>
-                    <li className='mb-2'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li>
+                    <li className='mb-2'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li> 
                 </ol>
             </div>
 

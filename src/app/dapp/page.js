@@ -209,8 +209,10 @@ const Betting = () => {
 
 
         try {
-            const pointTwoPercent = (0.1 / 100) * 1000 //100000000000 //this is billion //100000000 this is 100M
+            const pointTwoPercent = (0.1 / 100) * 100000000000
             console.log(Number(walletSSBalance), Number(pointTwoPercent));
+            console.log(pointTwoPercent);
+            console.log(walletBalance);
             if (Number(walletSSBalance) < Number(pointTwoPercent)) {
                 setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% pokebets tokens to place bet</span>);
                 return;
@@ -268,7 +270,7 @@ const Betting = () => {
             setWalletBalance(finalBalance)
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 8;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 18;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
             const balanceWithTxt = "pokebets Balance: " + ssBalanceInEth2Decimal.toString();
             setWalletSSBalance(finalSSBalance)

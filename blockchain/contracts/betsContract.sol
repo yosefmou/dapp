@@ -120,6 +120,12 @@ contract pokebets is ATM, Ownable {
         numTeams = 0;
     }
 
+    function reset() external onlyOwner() {
+        delete teams;
+        delete bets;
+        numTeams = 0;
+    }
+
     receive() external payable {
     }
 }

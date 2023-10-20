@@ -5,7 +5,7 @@ import "./ownable.sol";
 import "./ATM.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract ssdapp is ATM, Ownable {
+contract pokebets is ATM, Ownable {
 
     event NewBet(
         address addy, 

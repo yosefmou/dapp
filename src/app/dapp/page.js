@@ -387,7 +387,7 @@ const Betting = () => {
                                 <div className='lg:my-0 my-2 p-12 lg:p-20 mx-2 team h-[570px] bg-[#000000]'>
                                     <div className='w-60 h-60'>
                                         <div className='p-3 bg-white text-[#000000] team-label text-center font-bold'>#{team.id} - {team.name}</div>
-                                        <img className='object-cover w-full h-full mt-1 mb-1' src={`${team.name}.png`} />
+                                        <img className='object-contain w-full h-full mt-1 mb-1' src={`${team.name}.png`} />
                                         <label htmlFor={`betNameTeam${index + 1}`} className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Bet amount</label>
                                         <div className="relative">
                                             <input

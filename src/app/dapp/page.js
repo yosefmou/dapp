@@ -250,7 +250,7 @@ const Betting = () => {
 
             setSuccessMsg(<span className='p-2 bg-white'>Bet placed successfully</span>);
             setTimeout(() => {
-                setErrorMsg('');
+                setSuccessMsg('');
             }, 20000);
         } catch (error) {
             console.error(error.message);

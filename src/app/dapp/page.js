@@ -423,7 +423,7 @@ const Betting = () => {
                                             />
                                             <button type="submit" className="text-[#000000] absolute right-2.5 bottom-2.5 bg-white hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">BET</button>
                                         </div>
-                                        <div className='text-lg font-bold'>Total Bets: {team.totalTokenBetAmount} ETH</div>
+                                        <div className='text-lg font-bold text-white'>Total Bets: {team.totalTokenBetAmount} ETH</div>
                                     </div>
                                 </div>
                             </form>

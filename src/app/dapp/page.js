@@ -270,7 +270,7 @@ const Betting = () => {
             setWalletBalance(finalBalance)
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 18;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 8;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
             const balanceWithTxt = "pokebets Balance: " + ssBalanceInEth2Decimal.toString();
             setWalletSSBalance(finalSSBalance)

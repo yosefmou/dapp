@@ -390,7 +390,7 @@ const Betting = () => {
                                     <div className='w-60 h-60'>
                                         <div className='p-3 bg-white text-[#000000] team-label text-center font-bold'>#{team.id} - {team.name}</div>
                                         <img className='object-contain w-full h-full mt-1 mb-1' src={`${team.name}.png`} />
-                                        <label htmlFor={`betNameTeam${index + 1}`} className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Bet amount</label>
+                                        <label htmlFor={`betNameTeam${index + 1}`} className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white ">Bet amount</label>
                                         <div className="relative">
                                             <input
                                                 name="betName"
@@ -452,7 +452,7 @@ const Betting = () => {
                         <form onSubmit={(e) => winnerHandler(e)} className='flex justify-center'>
                             <div className='p-10 winner'>
                                 <div className=''>
-                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Choose Winner</label>
+                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-white sr-only dark:text-white">Choose Winner</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none h-14 w-9">
                                         </div>
@@ -472,13 +472,13 @@ const Betting = () => {
                             </div>
                         </form>
                         <div className='flex flex-col items-center'>
-                            <h1 className='text-4xl font-bold uppercase'>Add Fighter</h1>
+                            <h1 className='text-4xl font-bold text-white uppercase'>Add Fighter</h1>
                             <h6 className='text-white text-md font-small'>You should always add 2 fighters, one fighter at a time.</h6>
                         </div>
                         <form onSubmit={(e) => addTeamHandler(e)} className='flex justify-center'>
                             <div className='p-10 addTeam'>
                                 <div className=''>
-                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Add Team</label>
+                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-white text-gray-900 sr-only dark:text-white">Add Team</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none h-14 w-9">
                                         </div>
@@ -539,7 +539,7 @@ const Betting = () => {
                 </div>
             </div>
             <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                <h1 className='text-4xl font-bold uppercase'>live battles</h1>
+                <h1 className='text-4xl font-bold text-white uppercase'>live battles</h1>
             </div>
             <div className='flex items-center justify-around'>
                 {renderTeams()}
@@ -547,26 +547,26 @@ const Betting = () => {
 
             <div className='flex flex-col items-center justify-around'>
                 <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                    <h1 className='text-4xl font-bold uppercase'>Guide</h1>
+                    <h1 className='text-4xl font-bold text-white uppercase'>Guide</h1>
                 </div>
                 <ol className='w-full text-left bg-[#000000] header p-8'>
-                    <li className='mb-2'><strong>TRAINER 1</strong> Will be on the <span className="text-[red]">bottom left corner</span></li>
-                    <li className='mb-2'><strong>TRAINER 2</strong> Will be on the <span className="text-[red]">top right corner</span></li>
+                    <li className='mb-2 text-white'><strong>TRAINER 1</strong> Will be on the <span className="text-[red]">bottom left corner</span></li>
+                    <li className='mb-2 text-white'><strong>TRAINER 2</strong> Will be on the <span className="text-[red]">top right corner</span></li>
                     <img src='ezgif.com-gif-maker.gif' className='w-full' />
 
                 </ol>
             </div>
             <div className='flex flex-col items-center justify-around p-8'>
                 <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                    <h1 className='text-4xl font-bold uppercase'>Rules</h1>
+                    <h1 className='text-4xl font-bold text-white uppercase'>Rules</h1>
                 </div>
                 <ol className='w-full text-left bg-[#000000] header p-8'>
-                    <li className='mb-2'>1. <strong>One Bet Per Match:</strong> Users are allowed to place a single bet per match.</li>
-                    <li className='mb-2'>2. <strong>Minimum Bet Amount:</strong> The minimum bet amount is 0.01 ETH.</li>
-                    <li className='mb-2'>3. <strong>Maximum Bet Amount:</strong> The maximum bet amount is 0.1 ETH.</li>
-                    <li className='mb-2'>4. <strong>Minimum pokebets Token Requirement:</strong> Users must hold a minimum amount of pokebets tokens to place a bet.</li>
-                    <li className='mb-2'>5. <strong>Bets in ETH:</strong> All bets are to be placed in Ethereum (ETH).</li>
-                    <li className='mb-2'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li> 
+                    <li className='mb-2 text-white'>1. <strong>One Bet Per Match:</strong> Users are allowed to place a single bet per match.</li>
+                    <li className='mb-2 text-white'>2. <strong>Minimum Bet Amount:</strong> The minimum bet amount is 0.01 ETH.</li>
+                    <li className='mb-2 text-white'>3. <strong>Maximum Bet Amount:</strong> The maximum bet amount is 0.1 ETH.</li>
+                    <li className='mb-2 text-white'>4. <strong>Minimum pokebets Token Requirement:</strong> Users must hold a minimum amount of pokebets tokens to place a bet.</li>
+                    <li className='mb-2 text-white'>5. <strong>Bets in ETH:</strong> All bets are to be placed in Ethereum (ETH).</li>
+                    <li className='mb-2 text-white'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li> 
                 </ol>
             </div>
 

@@ -209,7 +209,7 @@ const Betting = () => {
 
 
         try {
-            const pointTwoPercent = (0.1 / 100) * 100000000000
+            const pointTwoPercent = (0.01 / 100) * 100000000000
             console.log(Number(walletSSBalance), Number(pointTwoPercent));
             console.log(pointTwoPercent);
             console.log(walletBalance);

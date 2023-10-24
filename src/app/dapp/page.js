@@ -214,7 +214,7 @@ const Betting = () => {
             console.log(pointTwoPercent);
             console.log(walletBalance);
             if (Number(walletSSBalance) < Number(pointTwoPercent)) {
-                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.2% pokebets tokens to place bet</span>);
+                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.01% pokebets tokens to place bet</span>);
                 return;
             }
 

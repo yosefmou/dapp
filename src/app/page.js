@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between min-h-screen p-4 lg:p-24">
       <div className='flex items-center justify-center w-full px-8 py-8 mb-10 bg-white mt-14 header lg:w-96'>
-        <a href='/dapp' className='text-4xl font-bold text-center uppercase text-[#FFAA13]'>TO THE DAPP</a>
+        <a href='/dapp' className='text-4xl font-bold text-center uppercase text-[#FFAA13]'>LAUNCH LOTTOGOLD DAPP</a>
       </div>
       <div className='flex flex-col items-center justify-around'>
         <div className='flex px-8 py-8 mb-10 bg-white mt-14 header'>

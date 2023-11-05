@@ -22,7 +22,6 @@ const lottogold = () => {
     const [walletSSBalanceTxt, setWalletSSBalanceTxt] = useState('')
     const [web3, setWeb3] = useState(null)
     const [address, setAddress] = useState(null)
-    const [winnerId, setWinnerId] = useState(null)
     const [walletConnectorText, setWalletConnectorText] = useState('Connect Wallet')
     const [owner, setOwner] = useState(null)
     const [tokenContract, setTokenContract] = useState(null)
@@ -32,6 +31,7 @@ const lottogold = () => {
     const [winnerTicketNumber, setWinnerTicketNumber] = useState(null)
     const [jackpotBalance, setJackpotBalance] = useState(null)
     const [adminMsg, setAdminMsg] = useState(null)
+    const [currentIndex, setCurrentIndex] = useState(0);
 
 
     useEffect(() => {
@@ -574,7 +574,6 @@ const lottogold = () => {
 
     const randomCounter = () => {
         const fakeCounterValues = ['000000', '147433', '488905', '361316', '523583', '458948', '752041', '368549', '557921', '786104', '628773', '410102', '001122', '466321', '193472', '099081'];
-        const [currentIndex, setCurrentIndex] = useState(0);
 
         useEffect(() => {
             const interval = setInterval(() => {

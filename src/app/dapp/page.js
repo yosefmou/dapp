@@ -1,265 +1,137 @@
 'use client';
 import { MetaMaskSDK } from '@metamask/sdk';
 import Web3 from 'web3'
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import bettingContract from '../../../blockchain/betting';
+import randNums from './numbers.json';
 
 const options = {
-    dappMetadata: { name: "pokebets DAPP", url: "https://pokebets.vercel.app/dapp" },
+    dappMetadata: { name: "LottoGold DAPP", url: "https://pokebets.vercel.app/dapp" },
     preferDesktop: false
 };
 
 const MMSDK = new MetaMaskSDK(options);
+const randomNumbers = randNums;
 
-const Betting = () => {
+const lottogold = () => {
     const [errorMsg, setErrorMsg] = useState('')
+    const [infoMsg, setInfoMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
-    const [bets, setBets] = useState('')
-    const [betAddress, setBetAddress] = useState('')
     const [walletBalance, setWalletBalance] = useState('')
     const [walletSSBalance, setWalletSSBalance] = useState('')
     const [walletSSBalanceTxt, setWalletSSBalanceTxt] = useState('')
     const [web3, setWeb3] = useState(null)
     const [address, setAddress] = useState(null)
-    const [vmContract, setVmContract] = useState(null)
-    const [teams, setTeams] = useState(null)
-    const [owner, setOwner] = useState(null)
     const [winnerId, setWinnerId] = useState(null)
-    const [addTeam, setAddTeam] = useState(null)
-    const [totalBetAmount, setTotalBetAmount] = useState(null)
-    const [tokenContract, setTokenContract] = useState(null)
     const [walletConnectorText, setWalletConnectorText] = useState('Connect Wallet')
+    const [owner, setOwner] = useState(null)
+    const [tokenContract, setTokenContract] = useState(null)
+    const [userEligableForTickets, setUserEligableForTickets] = useState(null)
+    const [userWalletExists, setUserWalletExists] = useState(false)
+    const [userRedeemedTickets, setUserRedeemedTickets] = useState([])
+    const [winnerTicketNumber, setWinnerTicketNumber] = useState(null)
+    const [jackpotBalance, setJackpotBalance] = useState(null)
+    const [adminMsg, setAdminMsg] = useState(null)
 
-    const [totaPlatformlBetAmount, setTotalPlatformBetAmount] = useState('')
-    const [betNameTeam1, setBetNameTeam1] = useState('');
-    const [betAmountTeam1, setBetAmountTeam1] = useState('');
-    const [betNameTeam2, setBetNameTeam2] = useState('');
-    const [betAmountTeam2, setBetAmountTeam2] = useState('');
 
     useEffect(() => {
-        if (vmContract && address) getWalletBalanceHandler()
-        if (vmContract && address) getTeams()
-        if (vmContract && address) getOwner()
+        if (address) getWalletBalanceHandler()
+        if (address) getOwner()
+        if (address) walletExists(address)
+        if (address) checkEligibilityCount()
+        if (userRedeemedTickets) showUserTickets()
+        getWinnerTicket();
+
+
+        const getJackpotBalanceHandler = async () => {
+            console.log('getJackpotBalanceHandler')
+            try {
+                const provider = window.ethereum;
+                const web3 = new Web3(provider);
+                const jackpotBalance = await web3.eth.getBalance('0x311E31b7264522A04eC6DC5f127E71041820c9b0'); // Jackpot address
+                const balanceInEth = web3.utils.fromWei(jackpotBalance, 'ether');
+                const balanceInEth2Decimal = Math.round(balanceInEth * 100) / 100;
+                const finalBalance = balanceInEth2Decimal.toString();
+                setJackpotBalance(finalBalance);
+            } catch (error) {
+                console.log(error.message);
+                setTimeout(() => {
+                    setErrorMsg('');
+                }, 20000);
+            }
+        };
+
+        getJackpotBalanceHandler();
+
+        // Set up an interval to call the function every few seconds (e.g., every 5 seconds)
+        const intervalId = setInterval(() => {
+            getJackpotBalanceHandler();
+        }, 5000); // 5000 milliseconds = 5 seconds
+
+        // Clean up the interval when the component unmounts
+        return () => {
+            clearInterval(intervalId);
+        };
     },
-        [vmContract, address]
+        [tokenContract, address, userRedeemedTickets, jackpotBalance]
     );
 
-    const getOwner = async () => {
+    const getOwner = () => {
         try {
-            const owner = await vmContract.methods.owner().call();
+            const owner = "0x311E31b7264522A04eC6DC5f127E71041820c9b0";
             setOwner(owner)
         } catch (error) {
             console.log(error.message)
         }
     }
 
-    const getTeams = async () => {
-        try {
-            const teamArray = await vmContract.methods.getAllTeams().call(); // we need to pass the team id here
-            const teamsMapping = teamArray.map((team, index) => ({
-                id: index,
-                name: team.name,
-                totalTokenBetAmount: Number(team.totalBetAmount),
-            }));
-            console.log(teamsMapping)
-            const lastTwoTeams = teamsMapping.slice(-2);
-            let activeTeams = [];
-            let totalBetsAllTeams = 0;
-            for (let i = 0; i < lastTwoTeams.length; i++) {
-                const team = lastTwoTeams[i];
-                const teamId = team.id;
-                const teamName = team.name;
-                const totalTokenBetAmount = web3.utils.fromWei(team.totalTokenBetAmount.toString(), 'ether');
-                totalBetsAllTeams += Number(totalTokenBetAmount);
-                activeTeams.push({
-                    id: teamId,
-                    name: teamName,
-                    totalTokenBetAmount,
-                });
-            }
-            console.log(activeTeams);
-            setTeams(activeTeams)
-            setTotalBetAmount(totalBetsAllTeams)
-        } catch (error) {
-            console.log(error.message)
+    const checkEligibilityCount = () => {
+        const oneTicket = (0.25 / 100) * 1000;
+        const twoTickets = (0.5 / 100) * 1000;
+        const threeTickets = (1 / 100) * 1000;
+
+        let eligibility = 0;
+
+        if (Number(walletSSBalance) >= Number(oneTicket) && Number(walletSSBalance) < Number(twoTickets)) {
+            eligibility = 1;
+        } else if (Number(walletSSBalance) >= Number(twoTickets) && Number(walletSSBalance) < Number(threeTickets)) {
+            eligibility = 2;
+        } else if (Number(walletSSBalance) >= Number(threeTickets)) {
+            eligibility = 3;
         }
+
+        setUserEligableForTickets(eligibility);
     }
 
-    const getTotaPlatformlBetAmount = async () => {
+    const checkEligibility = () => {
         try {
-            const totaBest = await vmContract.methods.totalBetMoney().call(); // we need to pass the team id here
-            const totaPlatformlBets = web3.utils.fromWei(totaBest.toString(), 'ether');
-            setTotalPlatformBetAmount(`Dapp Total Bets: ${totaPlatformlBetAmount} ETH`)
-
-            console.log(totaPlatformlBets)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
-    const resetTeamsHandler = async (e) => {
-        e.preventDefault();
-        try {
-            const result = await vmContract.methods.reset().send({
-                from: address,
-                to: vmContract.options.address,
-            });
-        } catch (error) {
-            console.error(error.message);
-            setErrorMsg(error.message);
-        }
-    }
-
-    const handleBetNameChange = (e, teamIndex) => {
-        // Update the corresponding bet name state based on the teamIndex
-        if (teamIndex === 0) {
-            setBetNameTeam1(e.target.value);
-        } else if (teamIndex === 1) {
-            setBetNameTeam2(e.target.value);
-        } else if (teamIndex === 2) {
-            // Update bet name state for team 3, if needed
-        } // Add similar conditions for more teams
-    };
-
-    const handleBetAmountChange = (e, teamIndex) => {
-        // Update the corresponding bet amount state based on the teamIndex
-        if (teamIndex === 0) {
-            setBetAmountTeam1(e.target.value);
-        } else if (teamIndex === 1) {
-            setBetAmountTeam2(e.target.value);
-        } else if (teamIndex === 2) {
-            // Update bet amount state for team 3, if needed
-        } // Add similar conditions for more teams
-    };
-
-    const handleWinnerIdChange = (e) => {
-        setWinnerId(e.target.value);
-    };
-
-    const handleAddTeamChange = (e) => {
-        setAddTeam(e.target.value);
-    }
-
-    const addTeamHandler = async (e) => {
-        e.preventDefault();
-        const teamName = e.target.addTeam.value;
-
-        try {
-            const result = await vmContract.methods.createTeam(teamName).send({
-                from: address,
-                to: vmContract.options.address,
-            });
-            console.log(result);
-        } catch (error) {
-            console.error(error.message);
-            setErrorMsg(error.message);
-        }
-    }
-
-    const winnerHandler = async (e) => {
-        e.preventDefault();
-        const winnerIdInt = winnerId.toString();
-
-        try {
-            const betAmount = await vmContract.methods.totalBetMoney().call();
-            const bet = betAmount.toString();
-
-            const initialGasEstimationBigInt = await vmContract.methods.teamWinDistribution(winnerId).estimateGas({
-                value: bet,
-                to: vmContract.options.address,
-                from: address,
-            });
-
-            const initialGasEstimation = Number(initialGasEstimationBigInt);
-
-            const doubledGasLimit = initialGasEstimation * 1;
-
-            const gasPrice = await web3.eth.getGasPrice();
-            const gasPriceInWei = BigInt(web3.utils.toWei(gasPrice, 'gwei'));
-            const gasCostInWei = BigInt(doubledGasLimit) * gasPriceInWei;
-
-            // const userBalance = await web3.eth.getBalance(address);
-            // if (BigInt(userBalance) < BigInt(betAmount) + BigInt(gasCostInWei)) {
-            //     return;
-            // }
-
-            const result = await vmContract.methods.teamWinDistribution(winnerIdInt).send({
-                from: address, //sender
-                to: vmContract.options.address, //receiver - contract address
-                value: betAmount, // amount to send
-                // gasPrice: gasPriceInWei, // gas price in wei
-                // gas: doubledGasLimit // gas limit
-            });
-
-            setSuccessMsg(<span className='p-2 bg-white'>Winners declared successfully!</span>);
-        } catch (error) {
-            // const errorData = '0x4e487b710000000000000000000000000000000000000000000000000000000000000032';
-            // const decodedError = web3.eth.abi.decodeParameter('string', errorData);
-
-            // console.error(decodedError);
-            setErrorMsg(<span className='p-2 bg-white'>There is an error while handling winners, please try again later or get back to the developer!</span>);
-        }
-    }
-
-    const placeBetHandler = async (e) => {
-        e.preventDefault();
-        const teamId = e.target.teamId.value;
-        const name = e.target.betName.value;
-        const betAmount = e.target.betAmount.value;
-
-
-        try {
-            const pointTwoPercent = (0.01 / 100) * 100000000000
-            console.log(Number(walletSSBalance), Number(pointTwoPercent));
-            console.log(pointTwoPercent);
-            console.log(walletBalance);
-            if (Number(walletSSBalance) < Number(pointTwoPercent)) {
-                setErrorMsg(<span className='p-2 bg-white'>You need to have atleast 0.01% pokebets tokens to place bet</span>);
-                return;
+            const oneTicket = (0.25 / 100) * 1000
+            const twoTickets = (0.5 / 100) * 1000
+            const threeTickets = (1 / 100) * 1000
+            if (Number(walletSSBalance) >= Number(oneTicket) && Number(walletSSBalance) < Number(twoTickets)) {
+                setInfoMsg(<span className='p-2 bg-white'>you are eligable for <span className='text-8xl'>1</span> ticket</span>);
+                const element = document.querySelector('#assignTicket');
+                element.classList.remove('hidden');
+            } else if (Number(walletSSBalance) >= Number(twoTickets) && Number(walletSSBalance) < Number(threeTickets)) {
+                setInfoMsg(<span className='p-2 bg-white'>you are eligable for <span className='text-8xl'>2</span> tickets</span>);
+                const element = document.querySelector('#assignTicket');
+                element.classList.remove('hidden');
+            } else if (Number(walletSSBalance) >= Number(threeTickets)) {
+                setInfoMsg(<span className='p-2 bg-white'>you are eligable for <span className='text-8xl'>3</span> tickets</span>);
+                const element = document.querySelector('#assignTicket');
+                element.classList.remove('hidden');
+            } else {
+                setInfoMsg(<span className='p-2 text-center bg-white'>you are not eligable for any tickets <br /> <span className='text-xl'>For more info check the DAPP guide</span> </span>);
             }
 
-            const betAmountString = betAmount.toString();
-            const betAmountInWei = web3.utils.toWei(betAmountString, 'ether');
-
-
-            const initialGasEstimationBigInt = await vmContract.methods.createBet(name, teamId).estimateGas({
-                from: address,
-                to: vmContract.options.address,
-                value: betAmountInWei,
-            });
-
-            const initialGasEstimation = Number(initialGasEstimationBigInt);
-
-            const doubledGasLimit = initialGasEstimation * 1;
-
-            const gasPrice = await web3.eth.getGasPrice();
-            const gasPriceInWei = BigInt(web3.utils.toWei(gasPrice, 'gwei'));
-            const gasCostInWei = BigInt(doubledGasLimit) * gasPriceInWei;
-
-            // const userBalance = await web3.eth.getBalance(address);
-            // if (BigInt(userBalance) < BigInt(betAmountInWei) + BigInt(gasCostInWei)) {
-            //     setErrorMsg('Insufficient balance to place bet + gas cost');
-            //     return;
-            // }
-
-            const result = await vmContract.methods.createBet(name, teamId).send({
-                to: vmContract.options.address,
-                from: address,
-                value: betAmountInWei,
-            });
-
-            setSuccessMsg(<span className='p-2 bg-white'>Bet placed successfully</span>);
-            setTimeout(() => {
-                setSuccessMsg('');
-            }, 20000);
+            checkEligibilityCount();
         } catch (error) {
-            console.error(error.message);
-            setErrorMsg(<span className='p-2 bg-white'>There is an error while placing bet, please try again later</span>);
+            console.log(error.message)
             setTimeout(() => {
-                setErrorMsg('');
+                setInfoMsg('');
             }, 20000);
         }
-    };
+    }
 
     const getWalletBalanceHandler = async () => {
         try {
@@ -267,25 +139,29 @@ const Betting = () => {
             const balanceInEth = web3.utils.fromWei(walletBalance, 'ether');
             const balanceInEth2Decimal = Math.round(balanceInEth * 100) / 100;
             const finalBalance = "ETH Balance: " + balanceInEth2Decimal.toString();
-            setWalletBalance(finalBalance)
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 8;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 18;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
-            const balanceWithTxt = "pokebets Balance: " + ssBalanceInEth2Decimal.toString();
-            setWalletSSBalance(finalSSBalance)
-            setWalletSSBalanceTxt(balanceWithTxt)
+            const balanceWithTxt = "LOT Balance: " + ssBalanceInEth2Decimal.toString();
 
             if (address) {
-                setWalletConnectorText("Connected")
+                setWalletConnectorText("Connected");
             } else {
-                setWalletConnectorText("Connect Wallet")
+                setWalletConnectorText("Connect Wallet");
             }
 
+            // Set the state for both wallet balances and texts in a single setState call
+            setWalletBalance(finalBalance);
+            setWalletSSBalance(finalSSBalance);
+            setWalletSSBalanceTxt(balanceWithTxt);
         } catch (error) {
-            console.log(error.message)
+            console.log(error.message);
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 20000);
         }
-    }
+    };
 
     const initializeMetaMask = async () => {
         try {
@@ -294,13 +170,8 @@ const Betting = () => {
                 const web3 = new Web3(provider);
                 setWeb3(web3);
 
-                // Request Ethereum accounts
                 const accounts = await web3.eth.requestAccounts();
                 setAddress(accounts[0]);
-
-                // Continue with other initialization steps as needed
-                const vm = await bettingContract.bettingContract(web3);
-                setVmContract(vm);
 
                 const tokenContract = await bettingContract.tokenContract(web3);
                 setTokenContract(tokenContract);
@@ -311,6 +182,9 @@ const Betting = () => {
         } catch (err) {
             console.error(err.message);
             setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 5000);
         }
     };
 
@@ -319,7 +193,7 @@ const Betting = () => {
             return null
         }
         return (
-            <button onClick={connectWalletHandler} className="flex justify-center w-20 gap-2 p-2 m-0 text-black bg-white pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
+            <button onClick={connectWalletHandler} className="flex justify-center w-20 gap-2 p-2 m-0 text-white bg-[#1D1C1C] pointer-events-none lg:ml-2 place-items-center lg:pointer-events-auto rounded-xl">Refresh</button>
         )
     }
 
@@ -331,112 +205,338 @@ const Betting = () => {
         }
     };
 
-
     const redirectToWebsiteHandler = async () => {
         window.open('https://pokebets.vip/', '_blank');
     }
 
-    // const connectWalletHandler = async () => {
-    //     // Detect Ethereum provider
-    //     const provider = await MetaMaskSDK.create({});
+    const renderLotto = () => {
+        return (
+            <div className='mb-14'>
+                <div className='flex flex-col items-center w-full mt-7 mb-7'>
+                    <h1 className='p-2 text-4xl font-bold text-red-500 uppercase notification-message'>{errorMsg}</h1>
+                    <h1 className='p-2 text-4xl font-bold text-green-500 uppercase notification-message'>{successMsg}</h1>
+                </div>
+                <div className='flex flex-col w-[90vw] border-[10px] border-[#FFAA13] lg:flex-row lottery-bg'>
+                    {randomCounter()}
+                </div>
+            </div>
+        );
+    }
 
-    //     if (provider) {
-    //         try {
-    //             // Use the detected provider to initialize MetaMask
-    //             const web3 = new Web3(provider);
-    //             setWeb3(web3);
+    const renderJackPot = () => {
+        return (
+            <div className='flex flex-col border-[10px] border-[#FFAA13] lg:flex-row lottery-bg'>
+                <div className='flex flex-col justify-center w-full px-20 py-8 text-center'>
+                    <h1 className='font-bold text-[black] text-5xl text-center mb-5'>JACKPOT VALUE</h1>
+                    <h1 className='font-bold text-[black] text-8xl text-center'>{jackpotBalance} ETH</h1>
+                </div>
+            </div>
+        );
+    }
 
-    //             // Request Ethereum accounts
-    //             const accounts = await web3.eth.requestAccounts();
-    //             setAddress(accounts[0]);
+    async function getRandomNumbers(count) {
+        const shuffledNumbers = randomNumbers.slice(); // Copy the original array
+        for (let i = shuffledNumbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledNumbers[i], shuffledNumbers[j]] = [shuffledNumbers[j], shuffledNumbers[i]]; // Shuffle the array
+        }
+        return shuffledNumbers.slice(0, count);
+    }
 
-    //             // Continue with other initialization steps as needed
-    //             const vm = await bettingContract.bettingContract(web3);
-    //             setVmContract(vm);
+    const assignTicketToUser = async () => {
+        const selectedNumbers = await getRandomNumbers(userEligableForTickets);
+        console.log(selectedNumbers);
 
-    //             const tokenContract = await bettingContract.tokenContract(web3);
-    //             setTokenContract(tokenContract);
+        if (!address) {
+            return null;
+        }
 
-    //             // Now, MetaMask is connected and initialized
-    //         } catch (err) {
-    //             console.log(err.message);
-    //             setErrorMsg(<span className='p-2 bg-white'>Error While Connecting the Wallet</span>);
-    //         }
-    //     } else {
-    //         console.log('MetaMask is not installed');
-    //         setErrorMsg(<span className='p-2 bg-white'>MetaMask is not installed</span>);
-    //     }
-    // };
+        try {
+            const response = await fetch('/api/redeemTicket', {
+                method: 'POST',
+                body: JSON.stringify({ address, selectedNumbers }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
+            if (response.ok) {
+                setInfoMsg(<span className='p-2 text-center bg-white'>You have successfully redeemed your tickets <br /> </span>);
+                connectWalletHandler();
+            } else {
+                setInfoMsg(<span className='p-2 text-center bg-white'>There is an error please try again later <br /> <span className='text-xl'>For more info check the DAPP guide</span> </span>);
+            }
 
-    const renderTeams = () => {
-        if (!teams || teams.length === 0) {
+            setTimeout(() => {
+                setInfoMsg('');
+            }, 5000);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const showUserTickets = () => {
+        if (userRedeemedTickets.length === 0) {
+            return null;
+        }
+
+        const element = document.querySelector('#showTickets');
+        element.classList.add('hidden');
+
+        return (
+            <div className='flex flex-col items-center'>
+                <span className='text-5xl font-bold text-center uppercase mb-7'>Here is your tickets</span>
+                {userRedeemedTickets.map((item, index) => (
+                    <div key={index} className='flex mt-12 flex-col text-8xl font-semibold text-black border-[10px] border-[#FFAA13] lg:flex-row items-center justify-center lottery-bg'>
+                        {item.number}
+                    </div>
+                ))}
+            </div>
+        );
+
+    }
+
+    const checkMyTickets = async () => {
+        if (!address) {
+            return null;
+        }
+
+        try {
+            const response = await fetch('/api/getWalletTickets', {
+                method: 'POST',
+                body: JSON.stringify({ walletAddress: address }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { tickets } = await response.json();
+                if (tickets) {
+                    setUserRedeemedTickets(tickets)
+                }
+            } else {
+                // Handle any response errors
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const renderActionButtons = () => {
+        if (!address) {
+            return null
+        };
+
+        if (userWalletExists) {
             return (
-                <div className='flex w-full p-10 bg-white mt-14'>
-                    <h1 className='text-3xl font-bold uppercase text-[#000000]'>NO LIVE BATTLES, STAY TUNED</h1>
+                <div className='flex flex-col items-center justify-center' id='showTickets'>
+                    <button onClick={checkMyTickets} className="bg-white mx-7 text-[#FFAA13] font-bold py-10 px-14 border-b-4 action-buttons text-3xl">
+                        Show Redeemed Tickets
+                    </button>
                 </div>
             );
-        } else if (teams.length % 2 === 0) {
+        }
+
+        if (!winnerTicketNumber) {
             return (
-                <div className='mb-14'>
-                    <div className='flex flex-col items-center w-full mt-7 mb-7'>
-                        <h1 className='p-2 text-xl font-bold text-red-500 uppercase '>{errorMsg}</h1>
-                        <h1 className='p-2 text-xl font-bold text-green-500 uppercase'>{successMsg}</h1>
-                    </div>
-                    <div className='flex flex-col lg:flex-row'>
-                        {teams.map((team, index) => (
-                            <form onSubmit={(e) => placeBetHandler(e, index)} key={index} className='flex'>
-                                <div className='lg:my-0 my-2 p-12 lg:p-20 mx-2 team h-[570px] bg-[#000000]'>
-                                    <div className='w-60 h-60'>
-                                        <div className='p-3 bg-white text-[#000000] team-label text-center font-bold'>#{team.id} - {team.name}</div>
-                                        <img className='object-contain w-full h-full mt-1 mb-1' src={`${team.name}.png`} />
-                                        <label htmlFor={`betNameTeam${index + 1}`} className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white ">Bet amount</label>
-                                        <div className="relative">
-                                            <input
-                                                name="betName"
-                                                type="text"
-                                                id={`betNameTeam${index + 1}`}
-                                                value={index === 0 ? betNameTeam1 : betNameTeam2}
-                                                onChange={(e) => handleBetNameChange(e, index)}
-                                                className="block w-full p-4 mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="Your Name"
-                                                required
-                                            />
-                                            <input
-                                                name="teamId"
-                                                type="hidden"
-                                                id={`teamIdTeam${index + 1}`}
-                                                value={team.id}
-                                                className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="Team ID"
-                                                required
-                                            />
-                                            <input
-                                                name='betAmount'
-                                                type="text"
-                                                id={`betAmountTeam${index + 1}`}
-                                                value={index === 0 ? betAmountTeam1 : betAmountTeam2}
-                                                onChange={(e) => handleBetAmountChange(e, index)}
-                                                className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="Min. 0.01 - Max. 0.1"
-                                                required
-                                            />
-                                            <button type="submit" className="text-[#000000] absolute right-2.5 bottom-2.5 bg-white hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">BET</button>
-                                        </div>
-                                        <div className='text-lg font-bold text-white'>Total Bets: {team.totalTokenBetAmount} ETH</div>
-                                    </div>
-                                </div>
-                            </form>
-                        ))}
-                    </div>
+                <div className='flex items-center justify-center'>
+                    <button onClick={checkEligibility} className="bg-white mx-7 text-[#FFAA13] font-bold py-10 px-14 border-b-4 action-buttons text-3xl">
+                        Check Eligibility
+                    </button>
+                    <button onClick={assignTicketToUser} id='assignTicket' className="hidden bg-white mx-7 text-[#FFAA13] font-bold py-10 px-14 border-b-4 action-buttons text-3xl">
+                        Redeem Ticket/s
+                    </button>
                 </div>
             );
         } else {
             return (
-                <div className='flex w-full p-10 bg-white mt-14'>
-                    <h1 className='text-3xl font-bold uppercase text-[#000000]'>NO LIVE BATTLES, STAY TUNED</h1>
+                <div className='flex flex-col items-center justify-center'>
+                    <p className='mb-5 text-3xl font-bold'>Winning ticket has been drawn. Stay tuned for the next round and more chances to win!</p>
+                    <button disabled onClick={checkEligibility} className="py-10 text-3xl font-bold text-black bg-gray-500 border-b-4 mx-7 px-14 action-buttons-disabled">
+                        Check Eligibility
+                    </button>
                 </div>
-            );
+            )
+        }
+    }
+
+    const walletExists = async (address) => {
+        if (!address) {
+            return null;
+        }
+
+        try {
+            const response = await fetch('/api/findWallet', {
+                method: 'POST',
+                body: JSON.stringify({ walletAddress: address }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { exists } = await response.json();
+                console.log(exists)
+                if (exists) {
+                    setUserWalletExists(true)
+                } else {
+                    setUserWalletExists(false)
+                }
+            } else {
+                // Handle any response errors
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const drawWinnerTicket = async () => {
+        const winnerTicketNo = await getRandomNumbers(1);
+
+        try {
+            const response = await fetch('/api/winnerTicket', {
+                method: 'POST',
+                body: JSON.stringify({ ticket: winnerTicketNo[0].number }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { winnerTicket } = await response.json();
+                if (winnerTicket) {
+                    setAdminMsg(<span className='p-2 text-center bg-white'>The winner ticket has been drawn<br />Ticket Number: {winnerTicketNo[0].number}</span>);
+                    setWinnerTicketNumber(winnerTicketNo[0].number)
+                    checkIfWinnerExists(winnerTicketNo[0].number)
+                } else {
+                    setWinnerTicketNumber(false)
+                }
+            } else {
+                // Handle any response errors
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
+    const checkIfWinnerExists = async (winnerTicket) => {
+        try {
+            const response = await fetch('/api/findWinner', {
+                method: 'POST',
+                body: JSON.stringify({ ticket: winnerTicket }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { winner } = await response.json();
+                if (winner) {
+                    setAdminMsg(<span className='p-2 text-center bg-white'>There is a winner<br />{winner}</span>);
+                    addWinnerToDB(winner, winnerTicket);
+                    connectWalletHandler();
+                } else {
+                    setAdminMsg(<span className='p-2 text-center bg-white'>There is no winners this round</span>);
+                    connectWalletHandler();
+                }
+            } else {
+                setAdminMsg(<span className='p-2 text-center bg-white'>There is an error</span>);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const addWinnerToDB = async (winner, winnerTicket) => {
+        try {
+            const response = await fetch('/api/winnerUser', {
+                method: 'POST',
+                body: JSON.stringify({ winnerWallet: winner, winnerTicketNumber: winnerTicket }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { winner } = await response.json();
+                console.log(winner)
+            } else {
+                setAdminMsg(<span className='p-2 text-center bg-white'>There is no winners this round</span>);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const resetdraw = async () => {
+        try {
+            const response = await fetch('/api/resetWinnerTicket', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { reset } = await response.json();
+                resetTickets();
+            } else {
+                // Handle any response errors
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const resetTickets = async () => {
+        try {
+            const response = await fetch('/api/resetTickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { reset } = await response.json();
+                setAdminMsg(<span className='p-2 text-center bg-white'>The draw has been reset and a new one started</span>);
+                connectWalletHandler();
+            } else {
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getWinnerTicket = async () => {
+        try {
+            const response = await fetch('/api/getWinnerTicket', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const { winnerTicket } = await response.json();
+                if (winnerTicket.document) {
+                    const element = document.querySelector('#lottoCounter');
+                    element.innerHTML = ""
+                    element.innerHTML = "<div class='flex justify-center w-full px-20 py-8 text-center items-center'><span class='text-6xl text-black font-bold uppercase'>Winner:</span><h1 class='font-bold tracking-[5rem] text-[black] text-9xl text-center ml-20'>" + winnerTicket.document.ticket + "</h1></div>";
+
+                    if (winnerTicket) {
+                        setWinnerTicketNumber(winnerTicket)
+                    } else {
+                        setWinnerTicketNumber(false)
+                    }
+                }
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -444,74 +544,24 @@ const Betting = () => {
         if (address !== null) {
             if (address === owner) {
                 return (
-                    <div className='flex flex-col items-center p-5 mt-14 admin-section bg-[#000000]'>
+                    <div className='flex flex-col items-center p-5 mb-24 bg-white mt-14 admin-section'>
+                        <div className='flex flex-col items-center mt-7'>
+                            <h1 className='text-4xl font-bold text-black uppercase'>Draw the winner ticket</h1>
+                            <h6 className='text-xl font-normal text-black'>Click the button below to DRAW the winner ticket Number</h6>
+                        </div>
+                        <button onClick={drawWinnerTicket} className="bg-black mx-7 mt-10 text-[#FFAA13] font-bold py-10 px-14 border-b-4 action-buttons text-3xl">
+                            DRAW
+                        </button>
+
                         <div className='flex flex-col items-center mt-14'>
-                            <h1 className='text-4xl font-bold uppercase'>Choose Winner</h1>
-                            <h6 className='text-white text-md font-small'>Winner is by the id, the id you will find in LIVE BATTELS</h6>
+                            <h1 className='text-4xl font-bold text-black uppercase'>Reset the DRAW to start a new one</h1>
+                            <h6 className='text-xl font-normal text-black'>Click the button below to reset the DRAW and start a new one</h6>
                         </div>
-                        <form onSubmit={(e) => winnerHandler(e)} className='flex justify-center'>
-                            <div className='p-10 winner'>
-                                <div className=''>
-                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-white sr-only dark:text-white">Choose Winner</label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none h-14 w-9">
-                                        </div>
-                                        <input
-                                            name="winner"
-                                            type="text"
-                                            id="winner"
-                                            value={winnerId}
-                                            onChange={(e) => handleWinnerIdChange(e)}
-                                            className="block w-full p-4 pl-10 mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Winner ID"
-                                            required
-                                        />
-                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#000000] hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Winner</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div className='flex flex-col items-center'>
-                            <h1 className='text-4xl font-bold text-white uppercase'>Add Fighter</h1>
-                            <h6 className='text-white text-md font-small'>You should always add 2 fighters, one fighter at a time.</h6>
-                        </div>
-                        <form onSubmit={(e) => addTeamHandler(e)} className='flex justify-center'>
-                            <div className='p-10 addTeam'>
-                                <div className=''>
-                                    <label htmlFor='winner' className="mb-2 text-sm font-medium text-white text-gray-900 sr-only dark:text-white">Add Team</label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none h-14 w-9">
-                                        </div>
-                                        <input
-                                            name="addTeam"
-                                            type="text"
-                                            id="addTeam"
-                                            value={addTeam}
-                                            onChange={(e) => handleAddTeamChange(e)}
-                                            className="block w-full p-4 pl-10 mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Team"
-                                            required
-                                        />
-                                        <button type="submit" className="text-[#faf700] absolute right-2.5 bottom-2.5 bg-[#000000] hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Add Team</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div className='flex flex-col items-center'>
-                            <h1 className='text-4xl font-bold uppercase'>Reset</h1>
-                            <h6 className='text-white text-md font-small'>Start from a clean state</h6>
-                        </div>
-                        <form onSubmit={(e) => resetTeamsHandler(e)} className='flex justify-center'>
-                            <div className='p-5 addTeam'>
-                                <div className=''>
-                                    <label htmlFor='reset' className="mb-1 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
-                                    <div className="relative">
-                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        <button onClick={resetdraw} className="bg-black mx-7 mt-10 text-[#FFAA13] font-bold py-10 px-14 border-b-4 action-buttons text-3xl">
+                            RESTART
+                        </button>
                     </div>
+
                 );
 
             } else {
@@ -522,59 +572,88 @@ const Betting = () => {
         }
     }
 
+    const randomCounter = () => {
+        const fakeCounterValues = ['000000', '147433', '488905', '361316', '523583', '458948', '752041', '368549', '557921', '786104', '628773', '410102', '001122', '466321', '193472', '099081'];
+        const [currentIndex, setCurrentIndex] = useState(0);
+
+        useEffect(() => {
+            const interval = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % fakeCounterValues.length);
+            }, 50); // Change values every 100 milliseconds
+
+            return () => {
+                clearInterval(interval);
+            };
+        }, []);
+
+        return (
+            <div className='flex justify-center w-full px-20 py-8 text-center' id='lottoCounter'>
+                <h1 className='font-bold lg:tracking-[5rem] text-[black] text-5xl  lg:text-9xl text-center lg:ml-20'>{fakeCounterValues[currentIndex]}</h1>
+            </div>
+        );
+    }
+
+    const introMessage = () => {
+        if (!address) {
+            return (
+                <div className='flex mt-0 bg-[#fff] header px-8 py-4 mb-10 !shadow-none'>
+                    <h1 className='text-2xl font-bold text-black uppercase'>Connect your wallet to be able to draw your tickets</h1>
+                </div>
+            );
+        }
+        return;
+    }
+
     return (
-        <main className="flex flex-col items-center justify-start min-h-screen p-1 lg:p-14">
-            <div className="header z-10 items-center justify-between w-full font-mono text-sm flex lg:flex-row flex-col bg-[#000000] px-8">
+        <main className="flex flex-col items-center justify-start min-h-screen p-5 pt-0 lg:px-20">
+            <div className="header z-10 items-center justify-between w-full text-sm flex lg:flex-row flex-col bg-[#fff] px-8 pt-10 pb-4 custom-borders">
                 <div className="top-0 left-0 flex justify-center w-full pt-8 pb-6 lg:static lg:w-auto lg:p-4">
-                    <img className="h-20" src="logo.webp" />
+                    <img className="h-16" src="logo.jpg" />
                 </div>
                 <div className="left-0 flex flex-col items-end justify-center w-full bg-gradient-to-t lg:static lg:h-auto lg:w-auto lg:bg-none">
                     <div className="flex flex-col items-center justify-center w-full h-full p-4 lg:flex-row lg:p-0">
-                        <p className='mr-0 text-white lg:mr-7'>{walletBalance}</p>
-                        <p className='mr-0 text-white lg:mr-7'>{walletSSBalanceTxt}</p>
-                        <button onClick={connectWalletHandler} className="z-50 flex gap-2 p-2 text-[#000000] bg-white place-items-center lg:pointer-events-auto rounded-xl lg:m-0 m-1">{walletConnectorText}</button>
+                        <p className='mr-0 text-lg font-semibold text-black lg:mr-7'>{walletBalance}</p>
+                        <p className='mr-0 text-lg font-semibold text-black lg:mr-7'>{walletSSBalanceTxt}</p>
+                        <button onClick={connectWalletHandler} className="z-50 flex gap-2 p-2 text-white bg-[#1D1C1C] place-items-center lg:pointer-events-auto rounded-xl lg:m-0 m-1">{walletConnectorText}</button>
                         {renderRefresh()}
                         <button onClick={redirectToWebsiteHandler} className="w-20 justify-center text-center z-50 flex gap-2 p-2 lg:ml-2 text-white bg-[#1D1C1C] place-items-center lg:pointer-events-auto rounded-xl lg:mt-0 mt-1 m-0">Website</button>
                     </div>
                 </div>
             </div>
-            <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                <h1 className='text-4xl font-bold text-white uppercase'>live battles</h1>
+            <div className='flex mt-20 bg-[#fff] header px-8 py-8 mb-10'>
+                <h1 className='text-4xl font-bold text-black uppercase'>Unlocking Your Winning Streak</h1>
             </div>
-            <div className='flex items-center justify-around'>
-                {renderTeams()}
-            </div>
-
+            {introMessage()}
             <div className='flex flex-col items-center justify-around'>
-                <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                    <h1 className='text-4xl font-bold text-white uppercase'>Guide</h1>
+                {renderJackPot()}
+                {renderLotto()}
+                <div className='mt-10 mb-10'>
+                    <div className='flex flex-col items-center w-full mt-3 mb-7'>
+                        <h1 className='p-2 text-4xl font-bold text-center text-white uppercase notification-message'>{infoMsg}</h1>
+                    </div>
+                    {renderActionButtons()}
+                    {showUserTickets()}
                 </div>
-                <ol className='w-full text-left bg-[#000000] header p-8'>
-                    <li className='mb-2 text-white'><strong>TRAINER 1</strong> Will be on the <span className="text-[red]">bottom left corner</span></li>
-                    <li className='mb-2 text-white'><strong>TRAINER 2</strong> Will be on the <span className="text-[red]">top right corner</span></li>
-                    <img src='ezgif.com-gif-maker.gif' className='w-full' />
-
-                </ol>
             </div>
             <div className='flex flex-col items-center justify-around p-8'>
-                <div className='flex mt-14 bg-[#000000] header px-8 py-8 mb-10'>
-                    <h1 className='text-4xl font-bold text-white uppercase'>Rules</h1>
+                <div className='flex flex-col px-8 py-8 mb-10 text-center bg-white mt-14 header'>
+                    <h1 className='text-4xl font-bold text-[#FFAA13] uppercase'>Requirements</h1>
                 </div>
-                <ol className='w-full text-left bg-[#000000] header p-8'>
-                    <li className='mb-2 text-white'>1. <strong>One Bet Per Match:</strong> Users are allowed to place a single bet per match.</li>
-                    <li className='mb-2 text-white'>2. <strong>Minimum Bet Amount:</strong> The minimum bet amount is 0.01 ETH.</li>
-                    <li className='mb-2 text-white'>3. <strong>Maximum Bet Amount:</strong> The maximum bet amount is 0.1 ETH.</li>
-                    <li className='mb-2 text-white'>4. <strong>Minimum pokebets Token Requirement:</strong> Users must hold a minimum amount of pokebets tokens to place a bet.</li>
-                    <li className='mb-2 text-white'>5. <strong>Bets in ETH:</strong> All bets are to be placed in Ethereum (ETH).</li>
-                    <li className='mb-2 text-white'>6. <strong>Winnings Distribution:</strong> Winnings will be distributed once the match concludes.</li> 
+                <ol className='w-full p-8 text-left bg-white header'>
+                    <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[1] Ticket Entry: You need to hold at least 0.25% Tokens for [1] Ticket.</strong></li>
+                    <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[2] Ticket Entry: You need to hold at least 0.5% Tokens for [2] Tickets.</strong></li>
+                    <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[3] Ticket Entry: You need to hold at least 1% Tokens for [3] Tickets.</strong></li>
                 </ol>
             </div>
 
-            <div className='flex items-center justify-around w-full mt-10'>
+            <div className='flex flex-col items-center justify-around w-full mt-10 '>
+                <div className='flex flex-col items-center w-full mt-3 mb-7'>
+                    <h1 className='p-2 text-4xl font-bold text-center text-white uppercase notification-message'>{adminMsg}</h1>
+                </div>
                 {renderOwnerFunctions()}
             </div>
         </main>
     )
 }
 
-export default Betting
+export default lottogold

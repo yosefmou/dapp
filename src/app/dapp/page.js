@@ -6,7 +6,7 @@ import bettingContract from '../../../blockchain/betting';
 import randNums from './numbers.json';
 
 const options = {
-    dappMetadata: { name: "LottoGold DAPP", url: "https://pokebets.vercel.app/dapp" },
+    dappMetadata: { name: "LottoGold DAPP", url: "https://lottogold.vercel.app/dapp" },
     preferDesktop: false
 };
 

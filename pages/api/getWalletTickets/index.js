@@ -14,7 +14,7 @@ export default async function getWalletTickets(req, res) {
 
         const config = {
             method: 'post',
-            url: 'https://cors-anywhere.herokuapp.com/https://eu-central-1.aws.data.mongodb-api.com/app/data-floku/endpoint/data/v1/action/findOne',
+            url: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-floku/endpoint/data/v1/action/findOne',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Request-Headers': '*',

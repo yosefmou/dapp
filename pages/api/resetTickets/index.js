@@ -11,7 +11,7 @@ export default async function resetTickets(req, res) {
 
         const config = {
             method: 'post',
-            url: 'https://cors-anywhere.herokuapp.com/https://eu-central-1.aws.data.mongodb-api.com/app/data-floku/endpoint/data/v1/action/deleteMany',
+            url: 'https://eu-central-1.aws.data.mongodb-api.com/app/data-floku/endpoint/data/v1/action/deleteMany',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Request-Headers': '*',

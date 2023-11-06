@@ -206,7 +206,7 @@ const lottogold = () => {
     };
 
     const redirectToWebsiteHandler = async () => {
-        window.open('https://pokebets.vip/', '_blank');
+        window.open('https://lottogold.vip', '_blank');
     }
 
     const renderLotto = () => {

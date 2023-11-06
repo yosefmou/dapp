@@ -44,7 +44,6 @@ const lottogold = () => {
 
 
         const getJackpotBalanceHandler = async () => {
-            console.log('getJackpotBalanceHandler')
             try {
                 const provider = window.ethereum;
                 const web3 = new Web3(provider);
@@ -63,12 +62,10 @@ const lottogold = () => {
 
         getJackpotBalanceHandler();
 
-        // Set up an interval to call the function every few seconds (e.g., every 5 seconds)
         const intervalId = setInterval(() => {
             getJackpotBalanceHandler();
-        }, 5000); // 5000 milliseconds = 5 seconds
+        }, 5000); 
 
-        // Clean up the interval when the component unmounts
         return () => {
             clearInterval(intervalId);
         };
@@ -86,9 +83,9 @@ const lottogold = () => {
     }
 
     const checkEligibilityCount = () => {
-        const oneTicket = (0.25 / 100) * 1000;
-        const twoTickets = (0.5 / 100) * 1000;
-        const threeTickets = (1 / 100) * 1000;
+        const oneTicket = (0.25 / 100) * 1000000000;
+        const twoTickets = (0.5 / 100) * 1000000000;
+        const threeTickets = (1 / 100) * 1000000000;
 
         let eligibility = 0;
 
@@ -141,9 +138,9 @@ const lottogold = () => {
             const finalBalance = "ETH Balance: " + balanceInEth2Decimal.toString();
 
             const ssBalance = await tokenContract.methods.balanceOf(address).call();
-            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 18;
+            const ssBalanceInEth2Decimal = Math.round(ssBalance) / 10 ** 8;
             const finalSSBalance = ssBalanceInEth2Decimal.toString();
-            const balanceWithTxt = "LOT Balance: " + ssBalanceInEth2Decimal.toString();
+            const balanceWithTxt = "LottoGold Balance: " + ssBalanceInEth2Decimal.toString();
 
             if (address) {
                 setWalletConnectorText("Connected");
@@ -245,7 +242,6 @@ const lottogold = () => {
 
     const assignTicketToUser = async () => {
         const selectedNumbers = await getRandomNumbers(userEligableForTickets);
-        console.log(selectedNumbers);
 
         if (!address) {
             return null;
@@ -641,8 +637,11 @@ const lottogold = () => {
                 <ol className='w-full p-8 text-left bg-white header'>
                     <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[1] Ticket Entry: You need to hold at least 0.25% Tokens for [1] Ticket.</strong></li>
                     <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[2] Ticket Entry: You need to hold at least 0.5% Tokens for [2] Tickets.</strong></li>
-                    <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[3] Ticket Entry: You need to hold at least 1% Tokens for [3] Tickets.</strong></li>
+                    <li className='mb-5 text-[#FFAA13] text-2xl'><strong>[3] Ticket Entry: You need to hold at least 1% Tokens for [3] Tickets.</strong></li>
                 </ol>
+                <div className='mb-2 text-[#FFAA13] text-2xl'>
+                Every 48 hours, a bi-daily drawing will take place. If no winner is determined, a new drawing will occur every 12 hours until a winning ticket is selected. Once a winner is found, the timer for the next jackpot will reset to 48 hours, and the next jackpot will commence.
+                </div>
             </div>
 
             <div className='flex flex-col items-center justify-around w-full mt-10 '>

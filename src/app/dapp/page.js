@@ -47,7 +47,7 @@ const lottogold = () => {
             try {
                 const provider = window.ethereum;
                 const web3 = new Web3(provider);
-                const jackpotBalance = await web3.eth.getBalance('0x311E31b7264522A04eC6DC5f127E71041820c9b0'); // Jackpot address
+                const jackpotBalance = await web3.eth.getBalance('0x052906F934bdB816C82d976372e63FaA2461a525'); // Jackpot address
                 const balanceInEth = web3.utils.fromWei(jackpotBalance, 'ether');
                 const balanceInEth2Decimal = Math.round(balanceInEth * 100) / 100;
                 const finalBalance = balanceInEth2Decimal.toString();

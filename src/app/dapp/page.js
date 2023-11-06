@@ -638,10 +638,10 @@ const lottogold = () => {
                     <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[1] Ticket Entry: You need to hold at least 0.25% Tokens for [1] Ticket.</strong></li>
                     <li className='mb-2 text-[#FFAA13] text-2xl'><strong>[2] Ticket Entry: You need to hold at least 0.5% Tokens for [2] Tickets.</strong></li>
                     <li className='mb-5 text-[#FFAA13] text-2xl'><strong>[3] Ticket Entry: You need to hold at least 1% Tokens for [3] Tickets.</strong></li>
+                    <li className='mb-2 text-[#FFAA13] text-2xl'>
+                Every 48 hours, a bi-daily drawing will take place. If no winner is determined, <br/>a new drawing will occur every 12 hours until a winning ticket is selected. <br/>Once a winner is found, the timer for the next jackpot will <br/> reset to 48 hours, and the next jackpot will commence.
+                </li>
                 </ol>
-                <div className='mb-2 text-[#FFAA13] text-2xl'>
-                Every 48 hours, a bi-daily drawing will take place. If no winner is determined, a new drawing will occur every 12 hours until a winning ticket is selected. Once a winner is found, the timer for the next jackpot will reset to 48 hours, and the next jackpot will commence.
-                </div>
             </div>
 
             <div className='flex flex-col items-center justify-around w-full mt-10 '>

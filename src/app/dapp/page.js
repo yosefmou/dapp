@@ -75,7 +75,7 @@ const lottogold = () => {
 
     const getOwner = () => {
         try {
-            const owner = "0x311E31b7264522A04eC6DC5f127E71041820c9b0";
+            const owner = "0xf7689FCf24E3BcDa63C4E7cbD692c2621cbF57a4";
             setOwner(owner)
         } catch (error) {
             console.log(error.message)

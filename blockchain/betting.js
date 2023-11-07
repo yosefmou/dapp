@@ -1,466 +1,466 @@
-const ABI = [
-	{
-		"inputs": [],
-		"stateMutability": "payable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "Deposit",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "addy",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "teamId",
-				"type": "uint256"
-			}
-		],
-		"name": "NewBet",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "Withdrawal",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "balances",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "bets",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "addy",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "teamId",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_teamId",
-				"type": "uint256"
-			}
-		],
-		"name": "createBet",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			}
-		],
-		"name": "createTeam",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deposit",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "val",
-				"type": "uint256"
-			}
-		],
-		"name": "depositBro",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAllTeams",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "totalBetAmount",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct pokebetsdapp.Team[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_teamId",
-				"type": "uint256"
-			}
-		],
-		"name": "getTotalBetAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getTotalBetMoney",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "isOwner",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "numBetsAddress",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "numTeams",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "reset",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_teamId",
-				"type": "uint256"
-			}
-		],
-		"name": "teamWinDistribution",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "teams",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalBetAmount",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalBetMoney",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "receivers",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
-	}
-]
+// const ABI = [
+// 	{
+// 		"inputs": [],
+// 		"stateMutability": "payable",
+// 		"type": "constructor"
+// 	},
+// 	{
+// 		"anonymous": false,
+// 		"inputs": [
+// 			{
+// 				"indexed": false,
+// 				"internalType": "address",
+// 				"name": "sender",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "Deposit",
+// 		"type": "event"
+// 	},
+// 	{
+// 		"anonymous": false,
+// 		"inputs": [
+// 			{
+// 				"indexed": false,
+// 				"internalType": "address",
+// 				"name": "addy",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "uint256",
+// 				"name": "teamId",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "NewBet",
+// 		"type": "event"
+// 	},
+// 	{
+// 		"anonymous": false,
+// 		"inputs": [
+// 			{
+// 				"indexed": true,
+// 				"internalType": "address",
+// 				"name": "previousOwner",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": true,
+// 				"internalType": "address",
+// 				"name": "newOwner",
+// 				"type": "address"
+// 			}
+// 		],
+// 		"name": "OwnershipTransferred",
+// 		"type": "event"
+// 	},
+// 	{
+// 		"anonymous": false,
+// 		"inputs": [
+// 			{
+// 				"indexed": false,
+// 				"internalType": "address",
+// 				"name": "sender",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "address",
+// 				"name": "receiver",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "Transfer",
+// 		"type": "event"
+// 	},
+// 	{
+// 		"anonymous": false,
+// 		"inputs": [
+// 			{
+// 				"indexed": false,
+// 				"internalType": "address",
+// 				"name": "receiver",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"indexed": false,
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "Withdrawal",
+// 		"type": "event"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "address",
+// 				"name": "",
+// 				"type": "address"
+// 			}
+// 		],
+// 		"name": "balances",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "bets",
+// 		"outputs": [
+// 			{
+// 				"internalType": "string",
+// 				"name": "name",
+// 				"type": "string"
+// 			},
+// 			{
+// 				"internalType": "address",
+// 				"name": "addy",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "teamId",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "string",
+// 				"name": "_name",
+// 				"type": "string"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "_teamId",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "createBet",
+// 		"outputs": [],
+// 		"stateMutability": "payable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "string",
+// 				"name": "_name",
+// 				"type": "string"
+// 			}
+// 		],
+// 		"name": "createTeam",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "deposit",
+// 		"outputs": [],
+// 		"stateMutability": "payable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "val",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "depositBro",
+// 		"outputs": [],
+// 		"stateMutability": "payable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "getAllTeams",
+// 		"outputs": [
+// 			{
+// 				"components": [
+// 					{
+// 						"internalType": "string",
+// 						"name": "name",
+// 						"type": "string"
+// 					},
+// 					{
+// 						"internalType": "uint256",
+// 						"name": "totalBetAmount",
+// 						"type": "uint256"
+// 					}
+// 				],
+// 				"internalType": "struct pokebetsdapp.Team[]",
+// 				"name": "",
+// 				"type": "tuple[]"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "_teamId",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "getTotalBetAmount",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "getTotalBetMoney",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "isOwner",
+// 		"outputs": [
+// 			{
+// 				"internalType": "bool",
+// 				"name": "",
+// 				"type": "bool"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "address",
+// 				"name": "",
+// 				"type": "address"
+// 			}
+// 		],
+// 		"name": "numBetsAddress",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "numTeams",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "owner",
+// 		"outputs": [
+// 			{
+// 				"internalType": "address",
+// 				"name": "",
+// 				"type": "address"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "renounceOwnership",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "reset",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "_teamId",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "teamWinDistribution",
+// 		"outputs": [],
+// 		"stateMutability": "payable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "teams",
+// 		"outputs": [
+// 			{
+// 				"internalType": "string",
+// 				"name": "name",
+// 				"type": "string"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "totalBetAmount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [],
+// 		"name": "totalBetMoney",
+// 		"outputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"stateMutability": "view",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "address[]",
+// 				"name": "receivers",
+// 				"type": "address[]"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "transfer",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "address",
+// 				"name": "receiver",
+// 				"type": "address"
+// 			},
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "transfer",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "address",
+// 				"name": "newOwner",
+// 				"type": "address"
+// 			}
+// 		],
+// 		"name": "transferOwnership",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"inputs": [
+// 			{
+// 				"internalType": "uint256",
+// 				"name": "amount",
+// 				"type": "uint256"
+// 			}
+// 		],
+// 		"name": "withdraw",
+// 		"outputs": [],
+// 		"stateMutability": "nonpayable",
+// 		"type": "function"
+// 	},
+// 	{
+// 		"stateMutability": "payable",
+// 		"type": "receive"
+// 	}
+// ]
 
 const TokenABI = [
 	{
@@ -518,26 +518,62 @@ const TokenABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "manualSwap",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "subtractedValue",
+				"name": "_maxTxAmount",
 				"type": "uint256"
 			}
 		],
-		"name": "decreaseAllowance",
-		"outputs": [
+		"name": "MaxTxAmountUpdated",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "openTrading",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
 			}
 		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "removeLimits",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -545,31 +581,7 @@ const TokenABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "addedValue",
-				"type": "uint256"
-			}
-		],
-		"name": "increaseAllowance",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
+				"name": "recipient",
 				"type": "address"
 			},
 			{
@@ -618,12 +630,12 @@ const TokenABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "from",
+				"name": "sender",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "to",
+				"name": "recipient",
 				"type": "address"
 			},
 			{
@@ -641,6 +653,62 @@ const TokenABI = [
 			}
 		],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [],
+		"name": "_maxTaxSwap",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_maxTxAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_maxWalletSize",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_taxSwapThreshold",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -696,6 +764,25 @@ const TokenABI = [
 				"type": "uint8"
 			}
 		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "a",
+				"type": "address"
+			}
+		],
+		"name": "isBot",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	},
@@ -707,6 +794,19 @@ const TokenABI = [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -722,7 +822,7 @@ const TokenABI = [
 				"type": "string"
 			}
 		],
-		"stateMutability": "view",
+		"stateMutability": "pure",
 		"type": "function"
 	},
 	{
@@ -735,16 +835,30 @@ const TokenABI = [
 				"type": "uint256"
 			}
 		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "transferDelayEnabled",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "view",
 		"type": "function"
 	}
 ]
+
 // const bettingContract = web3 => {
 // 	return new web3.eth.Contract(ABI, '0x8FF1A7B5695b19036A2B9D457302e6a1D7B0cfE7');
 // }
 
 const tokenContract = web3 => {
-	return new web3.eth.Contract(TokenABI, '0xC633E56F970E95717dc9E20a88c8c694108D536E');
+	return new web3.eth.Contract(TokenABI, '0x0389b0ef4303c96130d946C205FF7514F147aa4E');
 }
 
 export default {

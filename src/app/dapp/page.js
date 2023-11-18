@@ -563,7 +563,7 @@ const Betting = () => {
                             {renderRefresh()}
                         </div>
                     </div>
-                </div>
+                </div> 
 
                 <div>
                     <div class="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">

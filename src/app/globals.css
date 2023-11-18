@@ -30,6 +30,7 @@ body {
   /* background-size: ; */
   background-repeat: repeat;
   background-color: black;
+  background-size: contain;
 }
 
 .teams-section {
@@ -80,7 +81,7 @@ body {
 }
 
 .fire-bg {
-  background: url("../../public/rules-bg.png");   
+  /* background: url("../../public/rules-bg.png");    */
   background-size: cover;
   height: 620px;
   display: flex;
@@ -88,6 +89,7 @@ body {
   align-items: stretch;
   background-repeat: no-repeat;
   font-size: 1.5rem;
+  background-color: transparent;
 }
 
 .fireline1 {

@@ -16,15 +16,28 @@
   }
 }
 
-body {
+.background-image {
   color: rgb(var(--foreground-rgb));
-  background: url("../../public/bg.png");
-  background-size: auto;
+  background: url("../../public/EVLz1SnU0AAJxx7.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: black;
+  box-shadow: inset 0 0 350px 250px black;
+}
+
+body {
+  background: url("../../public/bg-chars.png");
+  /* background-size: ; */
   background-repeat: repeat;
+  background-color: black;
 }
 
 .teams-section {
   background: white;
+}
+
+.button-border {
+  border-radius: 10px 30px 10px 30px;
 }
 
 .header {
@@ -44,11 +57,10 @@ body {
 }
 
 .team-label {
-  border-radius: 25px 25px 25px 25px;
-  border-style: solid;
-  border-width: 3px 3px 3px 3px;
-  border-color: #facb05;
-  box-shadow: 0px 3px 0px 1px #2D5FDF;
+  box-shadow: 0 0 122px 11px #505050;
+  border-radius: 10px 30px 10px 30px;
+  background: url("../../public/fireline.png");
+  background-size: contain;
 }
 
 .admin-section {
@@ -57,4 +69,42 @@ body {
   border-width: 3px 3px 3px 3px;
   border-color: #facb05;
   box-shadow: 0px 3px 0px 1px #2D5FDF;
+}
+
+.submit-button {
+  border-radius: 30px 10px 30px 10px;
+}
+
+.input-field {
+  border-radius: 10px 30px 10px 30px;
+}
+
+.fire-bg {
+  background: url("../../public/rules-bg.png");   
+  background-size: cover;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  background-repeat: no-repeat;
+}
+
+.fireline1 {
+ background: url("../../public/fireline3.png");
+ width: 100%;
+ background-repeat: repeat-x;
+ display: block;
+ height: 160px;
+ background-size: contain;
+ transform: rotate(180deg);
+}
+
+.fireline2 {
+  background: url("../../public/fireline3.png");
+  width: 100%;
+  background-repeat: repeat-x;
+  display: block;
+  height: 160px;
+  background-size: contain;
 }

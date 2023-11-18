@@ -68,8 +68,9 @@ body {
   border-radius: 25px 25px 25px 25px;
   border-style: solid;
   border-width: 3px 3px 3px 3px;
-  border-color: #facb05;
-  box-shadow: 0px 3px 0px 1px #2D5FDF;
+  border-color: #d97706;
+  background: url("../../public/bg.svg");
+  background-size: cover;
 }
 
 .submit-button {

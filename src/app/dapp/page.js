@@ -452,14 +452,15 @@ const Betting = () => {
         if (address !== null) {
             if (address === owner) {
                 return (
-                    <div className='flex flex-col items-center p-5 bg-transparent mt-14 admin-section'>
+                    <div className='flex flex-col items-center w-full p-5 mt-2 bg-transparent admin-section'>
+                        <h1 className='text-5xl font-bold text-white uppercase'>ADMIN CONTROLS</h1>
                         <div className='flex flex-col items-center w-full bg-transparent'>
                             <h1 className='p-2 text-xl font-bold text-red-500 uppercase '>{errorMsg}</h1>
                             <h1 className='p-2 text-xl font-bold text-green-500 uppercase'>{successMsg}</h1>
                         </div>
                         <div className='flex flex-col items-center mt-14'>
-                            <h1 className='text-4xl font-bold uppercase'>Choose Winner</h1>
-                            <h6 className='text-white text-md font-small'>Winner is by the id, the id you will find in LIVE BATTELS</h6>
+                            <h1 className='text-4xl font-bold text-white uppercase'>Winner Selection</h1>
+                            <h6 className='text-white text-md font-small'>Winner is by the id, the id you will find in LIVE FIGHTS</h6>
                         </div>
                         <form onSubmit={(e) => winnerHandler(e)} className='flex justify-center'>
                             <div className='p-10 winner'>
@@ -516,16 +517,17 @@ const Betting = () => {
                                 </div>
                             </div>
                         </form>
-                        <div className='flex flex-col items-center'>
-                            <h1 className='text-4xl font-bold uppercase'>Reset</h1>
-                            <h6 className='text-white text-md font-small'>Start from a clean state</h6>
+                        <div className='flex flex-col items-center mt-5'>
+                            <h1 className='text-4xl font-bold text-white uppercase'>Reset</h1>
+                            <h6 className='text-white text-md font-small'>Click "RESET" to initiate a full state reset. This will revert any changes and allow you to start anew in case of errors</h6>
+                            <h6 className='text-red-500 text-md font-small'>ONLY in emergency</h6>
                         </div>
                         <form onSubmit={(e) => resetTeamsHandler(e)} className='flex justify-center'>
                             <div className='p-5 addTeam'>
                                 <div className=''>
                                     <label htmlFor='reset' className="mb-1 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
                                     <div className="relative">
-                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">Reset</button>
+                                        <button type="submit" className="text-white w-32 bg-red-800 hover.bg-[#faf700] hover.text-[#000000] focus:ring-4 focus.outline-none rounded-xl text-sm px-4 py-2 font-bold">NUKE</button>
                                     </div>
                                 </div>
                             </div>
@@ -675,7 +677,7 @@ const Betting = () => {
                 </ol>
             </div>
 
-            <div className='flex items-center justify-around w-full p-1 mt-10 lg:p-14'>
+            <div className='flex items-center justify-around w-full p-1 lg:p-14 lg:pt-0'>
                 {renderOwnerFunctions()}
             </div>
         </main>

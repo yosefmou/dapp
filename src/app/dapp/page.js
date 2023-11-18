@@ -388,7 +388,7 @@ const Betting = () => {
                         {teams.map((team, index) => (
                             <div className='flex'>
                                 <form onSubmit={(e) => placeBetHandler(e, index)} key={index} className={`flex ${index === 1 ? 'mt-5 lg:mt-64' : ''}`}>
-                                    <div className='lg:my-0 my-2 p-12 lg:p-20 lg:pt-10 mx-2 bg-[#000000]'>
+                                    <div className='p-12 mx-2 my-2 bg-transparent lg:my-0 lg:p-20 lg:pt-10'>
                                         <div className='w-full lg:w-[34rem]'>
                                             <div className='p-3 text-lg font-bold text-center text-white uppercase bg-black team-label'>{team.id} - {team.name}</div>
                                             <img className='object-contain w-full h-full mt-1 mb-1' src={`${team.name}.png`} />

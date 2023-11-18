@@ -655,14 +655,14 @@ const Betting = () => {
             </div> */}
 
             <div className='flex flex-col items-center justify-around w-full p-1 lg:p-14'>
-                <div className='flex mt-14 bg-[#000000] px-8 pt-8'>
+                <div className='flex px-8 pt-8 bg-transparent mt-14'>
                     <h1 className='text-4xl font-bold text-white uppercase'>TWITCH STREAM</h1>
                 </div>
                 <iframe className='mt-4 lg:w-[60vw] w-[95vw]' id="twitchIframe" src="https://player.twitch.tv/?channel=ren_kisaragi__&parent=fightclub-betting.vercel.app" frameborder="0" allowfullscreen="true" height="400px" width="100%"></iframe>
             </div>
 
             <div className='flex flex-col items-center justify-around p-1 lg:p-14'>
-                <div className='flex mt-14 bg-[#000000] px-8 pt-8'>
+                <div className='flex px-8 pt-8 bg-transparent mt-14'>
                     <h1 className='text-4xl font-bold text-white uppercase'>Fight Club Rules</h1>
                 </div>
                 <ol className='w-full text-left bg-[#000000] fire-bg p-8'>

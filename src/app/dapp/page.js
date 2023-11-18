@@ -665,7 +665,7 @@ const Betting = () => {
                 <div className='flex px-8 pt-8 bg-transparent mt-14'>
                     <h1 className='text-4xl font-bold text-white uppercase'>Fight Club Rules</h1>
                 </div>
-                <ol className='w-full text-left bg-[#000000] fire-bg p-8'>
+                <ol className='w-full text-left bg-[#000000] fire-bg p-8 justify-start'>
                     <li className='pb-2 mx-auto my-0 text-white'>1. <strong>Single Bet, Maximum Thrill:</strong> Place one bet per match for an immersive betting experience.</li>
                     <li className='pb-2 mx-auto my-0 text-white '>2. <strong>Start Small, Win Big:</strong> Kick off with a minimum bet amount of 0.01 ETH.</li>
                     <li className='pb-2 mx-auto my-0 text-white'>3. <strong>Dream Big, Bet Wise:</strong> Your excitement has a cap – maximum bet amount is 0.1 ETH.</li>

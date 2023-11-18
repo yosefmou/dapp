@@ -82,12 +82,12 @@ body {
 .fire-bg {
   background: url("../../public/rules-bg.png");   
   background-size: cover;
-  height: 450px;
+  height: 620px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: stretch;
   background-repeat: no-repeat;
+  font-size: 1.5rem;
 }
 
 .fireline1 {

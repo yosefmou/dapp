@@ -333,7 +333,7 @@ const Betting = () => {
 
 
     const redirectToWebsiteHandler = async () => {
-        window.open('https://fightclub.vip/', '_blank');
+        window.open('https://fight-club.vip/', '_blank');
     }
 
     // const connectWalletHandler = async () => {

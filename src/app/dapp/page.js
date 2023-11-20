@@ -61,7 +61,7 @@ const Betting = () => {
                 name: team.name,
                 totalTokenBetAmount: Number(team.totalBetAmount),
             }));
-            console.log(teamsMapping)
+
             const lastTwoTeams = teamsMapping.slice(-2);
             let activeTeams = [];
             let totalBetsAllTeams = 0;
@@ -151,7 +151,6 @@ const Betting = () => {
             });
             console.log(result);
         } catch (error) {
-            console.error(error.message);
             setErrorMsg(error.message);
         }
     }
@@ -209,12 +208,9 @@ const Betting = () => {
 
 
         try {
-            const pointTwoPercent = (0.01 / 100) * 100000000000
-            console.log(Number(walletSSBalance), Number(pointTwoPercent));
-            console.log(pointTwoPercent);
-            console.log(walletBalance);
+            const pointTwoPercent = (0.025 / 100) * 100000000000
             if (Number(walletSSBalance) < Number(pointTwoPercent)) {
-                setErrorMsg(<span className='p-2 text-red-600 bg-transparent'>You need to have atleast 0.01% pokebets tokens to place bet</span>);
+                setErrorMsg(<span className='p-2 text-red-600 bg-transparent'>You need to have atleast 0.025% FightClub tokens to place bet</span>);
                 return;
             }
 
@@ -671,7 +667,7 @@ const Betting = () => {
                     <li className='pb-2 mx-auto my-0 text-white'>1. <strong>Single Bet, Maximum Thrill:</strong> Place one bet per match for an immersive betting experience.</li>
                     <li className='pb-2 mx-auto my-0 text-white '>2. <strong>Start Small, Win Big:</strong> Kick off with a minimum bet amount of 0.01 ETH.</li>
                     <li className='pb-2 mx-auto my-0 text-white'>3. <strong>Dream Big, Bet Wise:</strong> Your excitement has a cap – maximum bet amount is 0.1 ETH.</li>
-                    <li className='pb-2 mx-auto my-0 text-white'>4. <strong>Pokebets Token Power:</strong> Unlock betting prowess by holding a minimum amount of pokebets tokens.</li>
+                    <li className='pb-2 mx-auto my-0 text-white'>4. <strong>FightClub Token Power:</strong> Unlock betting prowess by holding a minimum amount of 0.025% fightclub tokens.</li>
                     <li className='pb-2 mx-auto my-0 text-white'>5. <strong>Ethereum Exclusive:</strong> All bets placed exclusively in Ethereum (ETH).</li>
                     <li className='pb-2 mx-auto my-0 text-white'>6. <strong>Winning Unleashed:</strong> Dive into winnings as they flow in post-match conclusion.</li>
                 </ol>

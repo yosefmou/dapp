@@ -6,8 +6,8 @@ import './scripts.js'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'FightClub Bettings',
-  description: 'FightClub is a betting platform for the Fight games.',
+  title: 'MEMES FIGHT Bettings',
+  description: 'MEMES FIGHT is a betting platform. You can bet on your favorite memes and earn money.',
 }
 
 export default function RootLayout({ children }) {
